@@ -30,14 +30,24 @@
 	  pkgs.fzf-obc
 	  pkgs.fzf-make
 	  pkgs.fzf-git-sh
+	  pkgs.helix
+	  pkgs.nil
         ];
 
+      # Create /etc/zshrc that loads the nix-darwin environment.
+      # this is required if you want to use darwin's default shell - zsh
       homebrew = {
         enable = true;
         brews = [
           "mas"
         ];
         casks = [
+	  "wget"
+	  "curl"
+	  #"aria2"
+	  #"httpie"
+	  #"insomnia"
+	  #"wireshark"
           "hammerspoon"
           "firefox"
           "iina"
@@ -55,10 +65,6 @@
         };
         onActivation.cleanup = "zap";
       };
-
-      fonts.packages = [
-        pkgs.nerd-fonts._0xproto
-      ];
 
       system.activationScripts.applications.text = let
         env = pkgs.buildEnv {
@@ -81,24 +87,27 @@
         '';
 
       # https://daiderd.com/nix-darwin/manual/index.html
-      system.defaults = {
-        dock.autohide  = true;
-        dock.largesize = 32;
-        dock.persistent-apps = [
-          "/Applications/Ghostty.app"
-          "/Applications/Firefox.app"
-          "/System/Applications/Mail.app"
-          "/System/Applications/Calendar.app"
-          "/Applications/Signal.app"
-          "/Applications/KeePassXC.app"
-        ];
-        finder.FXPreferredViewStyle = "clmv";
-        loginwindow.GuestEnabled  = false;
-        NSGlobalDomain.AppleICUForce24HourTime = true;
-        NSGlobalDomain.AppleInterfaceStyle = "Dark";
-        NSGlobalDomain.InitialKeyRepeat = 10;
-        NSGlobalDomain.KeyRepeat = 2;
-      };
+     #system.defaults = {
+     #  dock.autohide  = true;
+     #  dock.largesize = 32;
+     #  dock.persistent-apps = [
+     #    "/Applications/Ghostty.app"
+     #    "/Applications/Firefox.app"
+     #    "/System/Applications/Mail.app"
+     #    "/System/Applications/Calendar.app"
+     #    "/Applications/Signal.app"
+     #    "/Applications/KeePassXC.app"
+     #  ];
+     #  finder.FXPreferredViewStyle = "clmv";
+     #  loginwindow.GuestEnabled  = false;
+     #  NSGlobalDomain.AppleICUForce24HourTime = true;
+     #  NSGlobalDomain.AppleInterfaceStyle = "Dark";
+     #  NSGlobalDomain.InitialKeyRepeat = 10;
+     #  NSGlobalDomain.KeyRepeat = 2;
+     #};
+
+      # Add ability to used TouchID for sudo authentication
+      # security.pam.enableSudoTouchIdAuth = true;
 
       # Auto upgrade nix package and the daemon service.
       services.nix-daemon.enable = true;
@@ -110,6 +119,12 @@
       # Create /etc/zshrc that loads the nix-darwin environment.
       programs.zsh.enable = true;  # default shell on catalina
       # programs.fish.enable = true;
+
+      # Enable Oh-my-zsh
+      # programs.zsh.ohMyZsh = {
+      #   enable = true;
+      #   plugins = [ "git" "sudo" "docker" "kubectl" ];
+      # };
 
       # Set Git commit hash for darwin-version.
       system.configurationRevision = self.rev or self.dirtyRev or null;
@@ -127,6 +142,8 @@
     # $ darwin-rebuild build --flake .#simple
     darwinConfigurations."m4" = nix-darwin.lib.darwinSystem {
       modules = [
+        ./modules/system.nix
+
         configuration
         nix-homebrew.darwinModules.nix-homebrew
         {
