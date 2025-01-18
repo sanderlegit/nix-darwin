@@ -35,15 +35,17 @@
           "firefox"
           "iina"
           "the-unarchiver"
+          "alacritty"
+          "ghostty"
         ];
         masApps = {
-          "Yoink" = 457622435;
+          # "Yoink" = 457622435;
         };
         onActivation.cleanup = "zap";
       };
 
       fonts.packages = [
-        (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+	pkgs.nerd-fonts._0xproto
       ];
 
       system.activationScripts.applications.text = let
@@ -59,7 +61,7 @@
           rm -rf /Applications/Nix\ Apps
           mkdir -p /Applications/Nix\ Apps
           find ${env}/Applications -maxdepth 1 -type l -exec readlink '{}' + |
-          while read src; do
+          while read -r src; do
             app_name=$(basename "$src")
             echo "copying $src" >&2
             ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
@@ -118,7 +120,7 @@
             # Apple Silicon Only
             enableRosetta = true;
             # User owning the Homebrew prefix
-            user = "elliott";
+            user = "sander";
           };
         }
       ];
