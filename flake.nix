@@ -23,6 +23,13 @@
           pkgs.neovim
           pkgs.obsidian
           pkgs.tmux
+	  pkgs.zellij
+	  pkgs.lazygit
+	  pkgs.fzf
+	  pkgs.ripgrep
+	  pkgs.fzf-obc
+	  pkgs.fzf-make
+	  pkgs.fzf-git-sh
         ];
 
       homebrew = {
@@ -37,6 +44,11 @@
           "the-unarchiver"
           "alacritty"
           "ghostty"
+	  "signal"
+	  "keepassxc"
+	  "topnotch"
+	  "betterdisplay"
+	  "vivid"
         ];
         masApps = {
           # "Yoink" = 457622435;
@@ -45,7 +57,7 @@
       };
 
       fonts.packages = [
-	pkgs.nerd-fonts._0xproto
+        pkgs.nerd-fonts._0xproto
       ];
 
       system.activationScripts.applications.text = let
@@ -68,20 +80,23 @@
           done
         '';
 
+      # https://daiderd.com/nix-darwin/manual/index.html
       system.defaults = {
         dock.autohide  = true;
-        dock.largesize = 64;
+        dock.largesize = 32;
         dock.persistent-apps = [
-          "${pkgs.alacritty}/Applications/Alacritty.app"
+          "/Applications/Ghostty.app"
           "/Applications/Firefox.app"
-          "${pkgs.obsidian}/Applications/Obsidian.app"
           "/System/Applications/Mail.app"
           "/System/Applications/Calendar.app"
+          "/Applications/Signal.app"
+          "/Applications/KeePassXC.app"
         ];
         finder.FXPreferredViewStyle = "clmv";
         loginwindow.GuestEnabled  = false;
         NSGlobalDomain.AppleICUForce24HourTime = true;
         NSGlobalDomain.AppleInterfaceStyle = "Dark";
+        NSGlobalDomain.InitialKeyRepeat = 10;
         NSGlobalDomain.KeyRepeat = 2;
       };
 
