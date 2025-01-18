@@ -55,6 +55,10 @@ alias cu="cd .. && ll"
 ci () {
 cd $1 && ll
 }
+
+export EDITOR=hx
+
+alias nre="darwin-rebuild switch --flake ~/nix#m4 --show-trace -v"
     '';
   };
 }

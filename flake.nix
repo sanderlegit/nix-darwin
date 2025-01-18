@@ -18,13 +18,33 @@
       # $ nix-env -qaP | grep wget
       environment.systemPackages =
         [
-          pkgs.alacritty
+          # fix aliases for macos
           pkgs.mkalias
-          pkgs.neovim
+
+          # apps
+          pkgs.alacritty
           pkgs.obsidian
+          pkgs.lazygit
+
+          # window manager
+          pkgs.aerospace
+          
+          # multiplex
           pkgs.tmux
           pkgs.zellij
-          pkgs.lazygit
+
+          # editor
+          pkgs.helix
+          pkgs.neovim
+
+          # lsp
+      	  pkgs.nil
+
+          # file explore
+          pkgs.yazi
+          pkgs.broot
+
+          # cli tools
           pkgs.zsh
           pkgs.fzf
           pkgs.ripgrep
@@ -32,13 +52,11 @@
           pkgs.fzf-obc
           pkgs.fzf-make
           pkgs.fzf-git-sh
-          pkgs.helix
-      	  pkgs.nil
           pkgs.nushell
-          pkgs.yazi
-          pkgs.broot
 
+          # dev
           pkgs.kubectl
+          pkgs.k9s
         ];
 
       # Create /etc/zshrc that loads the nix-darwin environment.
