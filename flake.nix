@@ -32,7 +32,7 @@
 
   outputs = inputs@{ self, nixpkgs, darwin, home-manager, nix-home-manager
     , dotfiles, ... }: {
-      darwinConfigurations."bekk-mac-03257" = darwin.lib.darwinSystem {
+      darwinConfigurations."m4" = darwin.lib.darwinSystem {
         system = "aarch64-darwin"; # apple silicon
         specialArgs = { inherit inputs; };
         modules = [
@@ -82,5 +82,5 @@
         ];
       };
     };
-  };
-}
+  }
+

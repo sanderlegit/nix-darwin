@@ -29,7 +29,7 @@
     taps = [ "CtrlSpice/homebrew-otel-desktop-viewer" ];
 
     # brew install
-    brews = [ "otel-desktop-viewer" ];
+    brews = [ "helix" "node" "npm" ];
 
     # brew install --cask
     # these need to be updated manually
