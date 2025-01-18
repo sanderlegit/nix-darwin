@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
   ###################################################################################
   #
@@ -12,13 +12,37 @@
   ###################################################################################
 {
   system = {
+    # Used for backwards compatibility, please read the changelog before changing.
+    # $ darwin-rebuild changelog
     stateVersion = 5;
     # activationScripts are executed every time you boot the system or run `nixos-rebuild` / `darwin-rebuild`.
+
     activationScripts.postUserActivation.text = ''
       # activateSettings -u will reload the settings from the database and apply them to the current session,
       # so we do not need to logout and login again to make the changes take effect.
       /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
     '';
+
+
+    activationScripts.applications.text = let
+        env = pkgs.buildEnv {
+          name = "system-applications";
+          paths = config.environment.systemPackages;
+          pathsToLink = "/Applications";
+        };
+      in
+        pkgs.lib.mkForce ''
+          # Set up applications.
+          echo "setting up /Applications..." >&2
+          rm -rf /Applications/Nix\ Apps
+          mkdir -p /Applications/Nix\ Apps
+          find ${env}/Applications -maxdepth 1 -type l -exec readlink '{}' + |
+          while read -r src; do
+            app_name=$(basename "$src")
+            echo "copying $src" >&2
+            ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
+          done
+        '';
 
     defaults = {
       # menuExtraClock.Show24Hour = true;  # show 24 hour clock
@@ -45,7 +69,7 @@
 
       # customize finder
       finder = {
-        FXPreferredViewStyle = "clmv";
+FXPreferredViewStyle = "clmv";
         _FXShowPosixPathInTitle = true;  # show full path in finder title
         AppleShowAllExtensions = true;  # show all file extensions
         FXEnableExtensionChangeWarning = false;  # disable warning when changing file extension
@@ -59,7 +83,7 @@
         # tap - 轻触触摸板, click - 点击触摸板
         Clicking = true;  # enable tap to click(轻触触摸板相当于点击)
         TrackpadRightClick = true;  # enable two finger right click
-        TrackpadThreeFingerDrag = true;  # enable three finger drag
+        TrackpadThreeFingerDrag = false;  # enable three finger drag
       };
 
       # customize settings that not supported by nix-darwin directly
@@ -67,7 +91,7 @@
       #   https://github.com/yannbertrand/macos-defaults
       NSGlobalDomain = {
         # `defaults read NSGlobalDomain "xxx"`
-        "com.apple.swipescrolldirection" = false;  # enable natural scrolling(default to true)
+        "com.apple.swipescrolldirection" = true;  # enable natural scrolling(default to true)
         "com.apple.sound.beep.feedback" = 0;  # disable beep sound when pressing volume up/down key
         AppleInterfaceStyle = "Dark";  # dark mode
         AppleKeyboardUIMode = 3;  # Mode 3 enables full keyboard control.
@@ -76,9 +100,9 @@
         # If you press and hold certain keyboard keys when in a text area, the key’s character begins to repeat.
         # This is very useful for vim users, they use `hjkl` to move cursor.
         # sets how long it takes before it starts repeating.
-        InitialKeyRepeat = 8;  # normal minimum is 15 (225 ms), maximum is 120 (1800 ms)
+        InitialKeyRepeat = 10;  # normal minimum is 15 (225 ms), maximum is 120 (1800 ms)
         # sets how fast it repeats once it starts. 
-        KeyRepeat = 2;  # normal minimum is 2 (30 ms), maximum is 120 (1800 ms)
+        KeyRepeat = 3;  # normal minimum is 2 (30 ms), maximum is 120 (1800 ms)
 
         NSAutomaticCapitalizationEnabled = false;  # disable auto capitalization(自动大写)
         NSAutomaticDashSubstitutionEnabled = false;  # disable auto dash substitution(智能破折号替换)
