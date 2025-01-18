@@ -1,8 +1,8 @@
 { ... }:
 
 let
-  hostname = "bekk-mac-03257";
-  username = "torgeir";
+  hostname = "lattice";
+  username = "sander";
 in {
   networking.hostName = hostname;
   networking.computerName = hostname;
