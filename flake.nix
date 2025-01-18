@@ -73,46 +73,6 @@
         onActivation.cleanup = "zap";
       };
 
-    # system.activationScripts.applications.text = let
-    #   env = pkgs.buildEnv {
-    #     name = "system-applications";
-    #     paths = config.environment.systemPackages;
-    #     pathsToLink = "/Applications";
-    #   };
-    # in
-    #   pkgs.lib.mkForce ''
-    #     # Set up applications.
-    #     echo "setting up /Applications..." >&2
-    #     rm -rf /Applications/Nix\ Apps
-    #     mkdir -p /Applications/Nix\ Apps
-    #     find ${env}/Applications -maxdepth 1 -type l -exec readlink '{}' + |
-    #     while read -r src; do
-    #       app_name=$(basename "$src")
-    #       echo "copying $src" >&2
-    #       ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
-    #     done
-    #   '';
-
-      # https://daiderd.com/nix-darwin/manual/index.html
-     #system.defaults = {
-     #  dock.autohide  = true;
-     #  dock.largesize = 32;
-     #  dock.persistent-apps = [
-     #    "/Applications/Ghostty.app"
-     #    "/Applications/Firefox.app"
-     #    "/System/Applications/Mail.app"
-     #    "/System/Applications/Calendar.app"
-     #    "/Applications/Signal.app"
-     #    "/Applications/KeePassXC.app"
-     #  ];
-     #  finder.FXPreferredViewStyle = "clmv";
-     #  loginwindow.GuestEnabled  = false;
-     #  NSGlobalDomain.AppleICUForce24HourTime = true;
-     #  NSGlobalDomain.AppleInterfaceStyle = "Dark";
-     #  NSGlobalDomain.InitialKeyRepeat = 10;
-     #  NSGlobalDomain.KeyRepeat = 2;
-     #};
-
       # Add ability to used TouchID for sudo authentication
       # security.pam.enableSudoTouchIdAuth = true;
 
