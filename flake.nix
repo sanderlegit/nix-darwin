@@ -1,86 +1,139 @@
 {
-  description = "Nix for macOS configuration";
+  description = "Dreams of Code Zenful macOS";
 
-  # format https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake.html#examples
   inputs = {
-    nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-23.11-darwin";
-    darwin = {
-      url = "github:lnl7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs-darwin";
-    };
-    home-manager = {
-      url = "github:nix-community/home-manager/release-23.11";
-      inputs.nixpkgs.follows = "nixpkgs-darwin";
-    };
-
-    # upgrade with
-    #   nix flake lock --update-input nixpkgs-firefox-darwin
-    nixpkgs-firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
-
-    mkAlias = {
-      url = "github:cdmistman/mkAlias";
-      inputs.nixpkgs.follows = "nixpkgs-darwin";
-    };
-
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-locked.url =
-      "github:NixOS/nixpkgs/1042fd8b148a9105f3c0aca3a6177fd1d9360ba5";
-
-    nix-home-manager.url = "github:torgeir/nix-home-manager";
-    dotfiles.url = "github:torgeir/dotfiles";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nix-darwin.url = "github:LnL7/nix-darwin";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
   };
 
-  outputs = inputs@{ self, nixpkgs, darwin, home-manager, nix-home-manager
-    , dotfiles, ... }: {
-      darwinConfigurations."m4" = darwin.lib.darwinSystem {
-        system = "aarch64-darwin"; # apple silicon
-        specialArgs = { inherit inputs; };
-        modules = [
-          {
-            nixpkgs.overlays = [
-              # pkgs.firefox-bin
-              inputs.nixpkgs-firefox-darwin.overlay
+  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew }:
+  let
+    configuration = { pkgs, config, ... }: {
 
-              # use selected unstable packages with pkgs.unstable.xyz
-              # https://discourse.nixos.org/t/how-to-use-nixos-unstable-for-some-packages-only/36337
-              # "https://github.com/ne9z/dotfiles-flake/blob/d3159df136294675ccea340623c7c363b3584e0d/configuration.nix"
-              (final: prev: {
-                unstable =
-                  import inputs.nixpkgs-unstable { system = prev.system; };
-              })
+      nixpkgs.config.allowUnfree = true;
 
-              (final: prev: {
-                # pkgs.unstable-locked.<something>
-                unstable-locked =
-                  import inputs.nixpkgs-locked { system = prev.system; };
-              })
+      # List packages installed in system profile. To search by name, run:
+      # $ nix-env -qaP | grep wget
+      environment.systemPackages =
+        [
+          # fix aliases for macos
+          pkgs.mkalias
 
-              (final: prev: {
-                # https://github.com/nix-community/home-manager/issues/1341#issuecomment-1468889352
-                mkAlias =
-                  inputs.mkAlias.outputs.apps.${prev.system}.default.program;
-              })
+          # apps
+          pkgs.alacritty
+          pkgs.obsidian
+          pkgs.lazygit
 
-            ];
-          }
-          ./modules/nix-core.nix
-          ./modules/system.nix
-          ./modules/apps.nix
-          ./modules/host-users.nix
-          home-manager.darwinModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.torgeir = import ./home;
-            home-manager.extraSpecialArgs = {
-              inherit inputs;
-              dotfiles = dotfiles;
-              # hack around nix-home-manager causing infinite recursion
-              isLinux = false;
-            };
-          }
+          # window manager
+          pkgs.aerospace
+          
+          # multiplex
+          pkgs.tmux
+          pkgs.zellij
+
+          # editor
+          pkgs.helix
+          pkgs.neovim
+
+          # lsp
+      	  pkgs.nil
+
+          # file explore
+          pkgs.yazi
+          pkgs.broot
+
+          # cli tools
+          pkgs.zsh
+          pkgs.fzf
+          pkgs.ripgrep
+          pkgs.zsh-fzf-tab
+          pkgs.fzf-obc
+          pkgs.fzf-make
+          pkgs.fzf-git-sh
+          pkgs.nushell
+
+          # dev
+          pkgs.kubectl
+          pkgs.k9s
         ];
-      };
-    };
-  }
 
+      # Create /etc/zshrc that loads the nix-darwin environment.
+      # this is required if you want to use darwin's default shell - zsh
+      homebrew = {
+        enable = true;
+        brews = [
+      	  "wget"
+      	  "curl"
+          "mas"
+        ];
+        casks = [
+      	  #"aria2"
+      	  #"httpie"
+      	  #"insomnia"
+      	  #"wireshark"
+          "hammerspoon"
+          "firefox"
+          "iina"
+          "the-unarchiver"
+          "alacritty"
+          "ghostty"
+      	  "signal"
+      	  "keepassxc"
+      	  "topnotch"
+      	  "betterdisplay"
+      	  "vivid"
+        ];
+        masApps = {
+          # "Yoink" = 457622435;
+        };
+        onActivation.cleanup = "zap";
+      };
+
+      # Add ability to used TouchID for sudo authentication
+      # security.pam.enableSudoTouchIdAuth = true;
+
+      # Auto upgrade nix package and the daemon service.
+      services.nix-daemon.enable = true;
+      # nix.package = pkgs.nix;
+
+      # Necessary for using flakes on this system.
+      nix.settings.experimental-features = "nix-command flakes";
+
+      environment.shells = [ pkgs.zsh ];
+
+
+      # The platform the configuration will be used on.
+      nixpkgs.hostPlatform = "aarch64-darwin";
+
+      # Set Git commit hash for darwin-version.
+      system.configurationRevision = self.rev or self.dirtyRev or null;
+    };
+  in
+  {
+    # Build darwin flake using:
+    # $ darwin-rebuild build --flake .#simple
+    darwinConfigurations."m4" = nix-darwin.lib.darwinSystem {
+      modules = [
+        ./modules/system.nix
+        ./modules/zsh.nix
+
+        configuration
+        nix-homebrew.darwinModules.nix-homebrew
+        {
+          nix-homebrew = {
+            enable = true;
+            # Apple Silicon Only
+            enableRosetta = true;
+            # User owning the Homebrew prefix
+            user = "sander";
+          };
+        }
+      ];
+    };
+
+    # Expose the package set, including overlays, for convenience.
+    darwinPackages = self.darwinConfigurations."m4".pkgs;
+  };
+}
