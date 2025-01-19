@@ -88,9 +88,18 @@ ln -s ~/.aerospace.toml ~/dotfiles/home/.aerospace.toml
   - home-manager seems complex
 - [ ] Figure out a better way to compose zshrc
 - [ ] Understand if/how to alter nix system pkg defaults, and find config docs
+- [ ] Declarative / stored firefox?
+  - https://support.mozilla.org/en-US/kb/profiles-where-firefox-stores-user-data
+  - https://support.mozilla.org/en-US/questions/1176169
+  - https://discourse.nixos.org/t/declare-firefox-extensions-and-settings/36265/7
 
 ## Docs
-- github.com/LnL7/nix-darwin#getting-started
-- github.com/elliottminns/nix/blob/main/flake.nix
-- github.com/AlexNabokikh/nix-config
+- https://github.com/LnL7/nix-darwin#getting-started
+- https://daiderd.com/nix-darwin/manual/index.html
 
+## Example Configs
+- https://github.com/elliottminns/nix
+- https://github.com/ryan4yin/nix-darwin-kickstarter
+- https://github.com/knl/dotskel
+- https://github.com/shaunsingh/nix-darwin-dotfiles
+- https://github.com/AlexNabokikh/nix-config

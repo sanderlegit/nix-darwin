@@ -44,6 +44,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 bindkey "ç" fzf-cd-widget
 
 # Aliases
+alias ll="ls -la"
 alias lg="lazygit"
 alias ld="lazydocker"
 # alias air='~/.air'
