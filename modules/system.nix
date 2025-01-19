@@ -53,12 +53,14 @@
         show-recents = false;  # disable recent apps
 
         persistent-apps = [
+          "/Applications/KeePassXC.app"
           "/Applications/Ghostty.app"
           "/Applications/Firefox.app"
           "/System/Applications/Mail.app"
           "/System/Applications/Calendar.app"
+          "/Applications/Slack.app"
           "/Applications/Signal.app"
-          "/Applications/KeePassXC.app"
+          "/System/Applications/Messages.app"
         ];
         # customize Hot Corners(触发角, 鼠标移动到屏幕角落时触发的动作)
         #wvous-tl-corner = 2;  # top-left - Mission Control
@@ -69,7 +71,7 @@
 
       # customize finder
       finder = {
-FXPreferredViewStyle = "clmv";
+        FXPreferredViewStyle = "clmv";
         _FXShowPosixPathInTitle = true;  # show full path in finder title
         AppleShowAllExtensions = true;  # show all file extensions
         FXEnableExtensionChangeWarning = false;  # disable warning when changing file extension
@@ -83,7 +85,7 @@ FXPreferredViewStyle = "clmv";
         # tap - 轻触触摸板, click - 点击触摸板
         Clicking = true;  # enable tap to click(轻触触摸板相当于点击)
         TrackpadRightClick = true;  # enable two finger right click
-        TrackpadThreeFingerDrag = false;  # enable three finger drag
+        TrackpadThreeFingerDrag = true;  # enable three finger drag
       };
 
       # customize settings that not supported by nix-darwin directly
@@ -130,7 +132,7 @@ FXPreferredViewStyle = "clmv";
         };
         "com.apple.finder" = {
           ShowExternalHardDrivesOnDesktop = true;
-          ShowHardDrivesOnDesktop = true;
+          ShowHardDrivesOnDesktop = false;
           ShowMountedServersOnDesktop = true;
           ShowRemovableMediaOnDesktop = true;
           _FXSortFoldersFirst = true;
@@ -143,7 +145,7 @@ FXPreferredViewStyle = "clmv";
           DSDontWriteUSBStores = true;
         };
         "com.apple.spaces" = {
-          "spans-displays" = 0; # Display have seperate spaces
+          "spans-displays" = 1; # Display have seperate spaces when this is 0
         };
         "com.apple.WindowManager" = {
           EnableStandardClickToShowDesktop = 0; # Click wallpaper to reveal desktop
@@ -188,13 +190,12 @@ FXPreferredViewStyle = "clmv";
       # so it matches common keyboard layout: `ctrl | command | alt`
       #
       # disabled, caused only problems!
-      swapLeftCommandAndLeftAlt = false;  
+      swapLeftCommandAndLeftAlt = true;  
     };
   };
 
   # Add ability to used TouchID for sudo authentication
   security.pam.enableSudoTouchIdAuth = true;
-
 
   # Set your time zone.
   #time.timeZone = "Asia/shanghai";

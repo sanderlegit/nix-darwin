@@ -54,9 +54,15 @@
           pkgs.fzf-git-sh
           pkgs.nushell
 
+          # disk usage
+          pkgs.du-dust
+
           # dev
           pkgs.kubectl
           pkgs.k9s
+
+          # local ml
+          pkgs.ollama
         ];
 
       # Create /etc/zshrc that loads the nix-darwin environment.
@@ -84,6 +90,8 @@
       	  "topnotch"
       	  "betterdisplay"
       	  "vivid"
+          "mullvadvpn"
+          "slack"
         ];
         masApps = {
           # "Yoink" = 457622435;
