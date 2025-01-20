@@ -21,30 +21,16 @@
           # fix aliases for macos
           pkgs.mkalias
 
-          # apps
-          pkgs.alacritty
-          pkgs.obsidian
+          pkgs.alacritty     # terminal
           pkgs.lazygit
-
-          # window manager
-          pkgs.aerospace
-          
-          # multiplex
-          pkgs.tmux
-          pkgs.zellij
-
-          # editor
-          pkgs.helix
-          pkgs.neovim
-
-          # lsp
-      	  pkgs.nil
-
-          # file explore
-          pkgs.yazi
-          pkgs.broot
-
-          # cli tools
+          pkgs.aerospace     # i3 style windows
+          pkgs.tmux          # multiplex term
+          pkgs.zellij        # multiplex term
+          pkgs.helix         # editor
+          pkgs.neovim        # editor
+          pkgs.nil           # nix lsp
+          pkgs.yazi          # file explore
+          pkgs.broot         # file explore
           pkgs.zsh
           pkgs.fzf
           pkgs.ripgrep
@@ -53,18 +39,16 @@
           pkgs.fzf-make
           pkgs.fzf-git-sh
           pkgs.nushell
-          pkgs.bat
-
-          # disk usage
-          pkgs.du-dust
-
-          # dev
+          pkgs.bat           # better cat
+          pkgs.bottom        # sysmonitor
+          pkgs.du-dust       # diskusage
+          pkgs.mosh          # betterssh
+          pkgs.docker
+          pkgs.dive          # docker inspect
           pkgs.kubectl
+          pkgs.minikube
           pkgs.k9s
-
-          # local ml
-          pkgs.ollama
-
+          pkgs.ollama        # local ml
           pkgs.awscli2
 
           ## Go
@@ -105,6 +89,7 @@
           pkgs.python312Packages.ruff
           pkgs.python312Packages.python-lsp-server
           pkgs.python312Packages.jedi-language-server
+
         ];
 
       # Create /etc/zshrc that loads the nix-darwin environment.
