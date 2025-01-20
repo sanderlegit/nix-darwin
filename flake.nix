@@ -96,19 +96,15 @@
           # $ poetry env use python
           # $ poetry install
           # $ $(poetry env activate)
+          pkgs.poetry
           pkgs.python3
           pkgs.python3Packages.virtualenv
           pkgs.python311
           pkgs.python312
           pkgs.python312Packages.pip
-          pkgs.poetry
+          pkgs.python312Packages.ruff
           pkgs.python312Packages.python-lsp-server
-
-          # pkgs.poetry
-          # pkgs.python3
-          # pkgs.python311
-          # pkgs.python312
-          # pkgs.python312Packages.pip # fixes: Discovered shell doesn't have an activator in virtual environment
+          pkgs.python312Packages.jedi-language-server
         ];
 
       # Create /etc/zshrc that loads the nix-darwin environment.
