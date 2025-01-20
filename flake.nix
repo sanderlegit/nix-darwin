@@ -66,9 +66,49 @@
           pkgs.ollama
 
           pkgs.awscli2
+
+          ## Go
           pkgs.go
           pkgs.gopls
-          pkgs.rustup # run $ rustup default stable
+          pkgs.protobuf
+          pkgs.protoc-gen-go
+          pkgs.protoc-gen-go-grpc
+          pkgs.protoc-gen-rust
+          pkgs.protoc-gen-rust-grpc
+          pkgs.protoc-gen-tonic
+          pkgs.protoc-gen-prost
+
+          ## Rust
+          # run to setup toolcahin
+          # $ rustup default stable
+          # $ rustup component add rust-analyzer
+          pkgs.rustup
+          pkgs.clippy
+
+          ## Py
+          # run, to create venv with py version, and edit pyproject toml
+          # $ python3.11 -m venv "venv"
+          # $ source ./venv/bin/activate
+          # $ poetry init
+          # $ poetry add {pkg}
+           
+          # run, when in dir of pyproject.toml
+          # $ poetry env use python
+          # $ poetry install
+          # $ $(poetry env activate)
+          pkgs.python3
+          pkgs.python3Packages.virtualenv
+          pkgs.python311
+          pkgs.python312
+          pkgs.python312Packages.pip
+          pkgs.poetry
+          pkgs.python312Packages.python-lsp-server
+
+          # pkgs.poetry
+          # pkgs.python3
+          # pkgs.python311
+          # pkgs.python312
+          # pkgs.python312Packages.pip # fixes: Discovered shell doesn't have an activator in virtual environment
         ];
 
       # Create /etc/zshrc that loads the nix-darwin environment.
@@ -99,6 +139,7 @@
           "mullvadvpn"
           "slack"
           "spotify"
+          "whatsapp"
         ];
         masApps = {
           # "Yoink" = 457622435;

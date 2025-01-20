@@ -22,6 +22,7 @@ compinit
 zstyle ':completion:*' menu select
 zmodload zsh/complist
 
+## FZF
 # Source fzf completion and keybindings first
 if [[ -f ${pkgs.fzf}/share/fzf/completion.zsh ]]; then
 source ${pkgs.fzf}/share/fzf/completion.zsh
@@ -57,15 +58,17 @@ fzf --ansi --disabled --query "$INITIAL_QUERY" \
     --bind "enter:become($EDITOR {1}:{2}:{3})"
 }
 
+## git
+function aug-env {
+  export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_ed25519_auguria"
+}
 
-# Aliases
+
+## Aliases
 alias ll="ls -la"
 alias lg="lazygit"
 alias ld="lazydocker"
 # alias air='~/.air'
-
-alias nosleep="sudo pmset -b disablesleep 1"
-alias yessleep="sudo pmset -b disablesleep 0"
 
 alias cu="cd .. && ll"
 ci () {
@@ -74,7 +77,22 @@ cd $1 && ll
 
 export EDITOR=hx
 
+## macos system
+alias nosleep="sudo pmset -b disablesleep 1"
+alias yessleep="sudo pmset -b disablesleep 0"
+
+## nix 
+
 alias nre="darwin-rebuild switch --flake ~/nix#m4 --show-trace -v"
+
+## python
+function poetry-venv-re {
+  rm -rf venv
+  python3.11 -m venv "venv"
+  source ./venv/bin/activate
+  poetry env info
+  poetry install
+}
     '';
   };
 }
