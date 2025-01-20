@@ -53,6 +53,7 @@
           pkgs.fzf-make
           pkgs.fzf-git-sh
           pkgs.nushell
+          pkgs.bat
 
           # disk usage
           pkgs.du-dust
@@ -63,6 +64,11 @@
 
           # local ml
           pkgs.ollama
+
+          pkgs.awscli2
+          pkgs.go
+          pkgs.gopls
+          pkgs.rustup # run $ rustup default stable
         ];
 
       # Create /etc/zshrc that loads the nix-darwin environment.
@@ -92,6 +98,7 @@
       	  "vivid"
           "mullvadvpn"
           "slack"
+          "spotify"
         ];
         masApps = {
           # "Yoink" = 457622435;
