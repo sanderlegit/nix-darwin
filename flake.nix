@@ -5,11 +5,30 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    # home-manager, used for managing user configuration
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      # The `follows` keyword in inputs is used for inheritance.
+      # Here, `inputs.nixpkgs` of home-manager is kept consistent with the `inputs.nixpkgs` of the current flake,
+      # to avoid problems caused by different versions of nixpkgs dependencies.
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager, nix-homebrew }:
   let
+      # TODO replace with your own username, email, system, and hostname
+    username = "sander";
+    useremail = "sander@aaadataplumbing.com";
+    system = "aarch64-darwin";
+    hostname = "lattice";
+
+    specialArgs =
+      inputs
+      // {
+        inherit username useremail hostname;
+      };
     configuration = { pkgs, config, ... }: {
 
       nixpkgs.config.allowUnfree = true;
@@ -32,9 +51,10 @@
           pkgs.yazi          # file explore
           pkgs.broot         # file explore
           pkgs.zsh
+          pkgs.oh-my-zsh
+          pkgs.starship
           pkgs.fzf
           pkgs.ripgrep
-          pkgs.zsh-fzf-tab
           pkgs.fzf-obc
           pkgs.fzf-make
           pkgs.fzf-git-sh
@@ -43,13 +63,18 @@
           pkgs.bottom        # sysmonitor
           pkgs.du-dust       # diskusage
           pkgs.mosh          # betterssh
-          pkgs.docker
+          # pkgs.docker        # macos also needs  https://docs.docker.com/desktop/release-notes/
           pkgs.dive          # docker inspect
           pkgs.kubectl
+          # pkgs.helm # not supported, using brew
           pkgs.minikube
           pkgs.k9s
           pkgs.ollama        # local ml
           pkgs.awscli2
+          pkgs.awsls
+          pkgs.aws-sam-cli   # lambda cli
+          pkgs.gh
+          pkgs.aws-sso-cli
 
           ## Go
           pkgs.go
@@ -68,6 +93,10 @@
           # $ rustup component add rust-analyzer
           pkgs.rustup
           pkgs.clippy
+
+          ## TS
+          pkgs.nodejs_22
+          pkgs.typescript-language-server
 
           ## Py
           # run, to create venv with py version, and edit pyproject toml
@@ -100,6 +129,8 @@
       	  "wget"
       	  "curl"
           "mas"
+          "helm"
+          "patchelf"
         ];
         casks = [
       	  #"aria2"
@@ -167,6 +198,17 @@
             user = "sander";
           };
         }
+
+        # home manager
+        home-manager.darwinModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.extraSpecialArgs = specialArgs;
+          home-manager.users.sander = import ./home/default.nix;
+          users.users.sander.home = "/Users/sander";
+        }
+
       ];
     };
 
