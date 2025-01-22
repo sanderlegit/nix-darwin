@@ -52,7 +52,8 @@
           pkgs.broot         # file explore
           pkgs.zsh
           pkgs.oh-my-zsh
-          pkgs.starship
+          # pkgs.starship
+          pkgs.skim
           pkgs.fzf
           pkgs.ripgrep
           pkgs.fzf-obc
@@ -205,7 +206,7 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = specialArgs;
-          home-manager.users.sander = import ./home/default.nix;
+          home-manager.users.sander = import ./home;
           users.users.sander.home = "/Users/sander";
         }
 
