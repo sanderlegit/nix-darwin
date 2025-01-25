@@ -46,7 +46,7 @@
           --bind "start:reload:$RG_PREFIX {q}" \
           --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
           --delimiter : \
-          --height '80%' \
+          --height '100%' \
           --preview 'bat --color=always {1} --highlight-line {2}' \
           --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
           --bind "enter:become($EDITOR {1}:{2}:{3})"
