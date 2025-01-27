@@ -60,6 +60,8 @@
           pkgs.fzf-make
           pkgs.fzf-git-sh
           pkgs.nushell
+          pkgs.sd            # better sed
+          pkgs.fd            # better find
           pkgs.bat           # better cat
           pkgs.bottom        # sysmonitor
           pkgs.du-dust       # diskusage
@@ -153,6 +155,7 @@
           "slack"
           "spotify"
           "whatsapp"
+          "karabiner-elements"
         ];
         masApps = {
           # "Yoink" = 457622435;
