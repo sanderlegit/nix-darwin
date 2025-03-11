@@ -42,10 +42,12 @@
 
           pkgs.alacritty     # terminal
           pkgs.lazygit
+          pkgs.lazydocker
           pkgs.aerospace     # i3 style windows
           pkgs.tmux          # multiplex term
           pkgs.zellij        # multiplex term
           pkgs.helix         # editor
+          pkgs.lsp-ai
           pkgs.neovim        # editor
           pkgs.nil           # nix lsp
           pkgs.yazi          # file explore
@@ -56,9 +58,10 @@
           pkgs.skim
           pkgs.fzf
           pkgs.ripgrep
-          pkgs.fzf-obc
+          # pkgs.fzf-obc
           pkgs.fzf-make
           pkgs.fzf-git-sh
+          pkgs.aider-chat
           pkgs.nushell
           pkgs.sd            # better sed
           pkgs.fd            # better find
@@ -78,6 +81,17 @@
           pkgs.aws-sam-cli   # lambda cli
           pkgs.gh
           pkgs.aws-sso-cli
+          pkgs.parquet-tools
+          pkgs.difftastic
+          pkgs.aichat
+          pkgs.croc
+          pkgs.pqrs
+          pkgs.gomplate
+          pkgs.yq-go
+          pkgs.terraform-ls
+          pkgs.gitui
+          pkgs.nushell
+          # pkgs.snowflake-cli
 
           ## Go
           pkgs.go
@@ -90,15 +104,22 @@
           pkgs.protoc-gen-tonic
           pkgs.protoc-gen-prost
 
+          #java
+          pkgs.openjdk
+
           ## Rust
           # run to setup toolcahin
           # $ rustup default stable
           # $ rustup component add rust-analyzer
           pkgs.rustup
           pkgs.clippy
+          pkgs.zig
 
           ## TS
           pkgs.nodejs_22
+          pkgs.nodePackages.aws-cdk
+          # pkgs.nodePackages_latest.nodejs
+          # pkgs.nodePackages_latest.aws-cdk
           pkgs.typescript-language-server
 
           ## Py
@@ -121,6 +142,7 @@
           pkgs.python312Packages.ruff
           pkgs.python312Packages.python-lsp-server
           pkgs.python312Packages.jedi-language-server
+          pkgs.python312Packages.playwright
 
         ];
 
@@ -129,17 +151,20 @@
       homebrew = {
         enable = true;
         brews = [
+          "cfn-lint"
       	  "wget"
       	  "curl"
           "mas"
           "helm"
           "patchelf"
+          "watch"
         ];
         casks = [
       	  #"aria2"
       	  #"httpie"
       	  #"insomnia"
       	  #"wireshark"
+      	  "inkdrop"
           "hammerspoon"
           "firefox"
           "iina"
