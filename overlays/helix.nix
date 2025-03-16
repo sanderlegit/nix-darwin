@@ -59,7 +59,7 @@ final: prev: {
     __contentAddressed = false;
     __noChroot = true;
 
-    preBuildPhases = ["preBuildPhase"];
+    preBuildPhases = [ "preBuildPhase" ];
     preBuildPhase = ''
       export HOME=$TMPDIR
       export GIT_SSL_CAINFO="${prev.cacert}/etc/ssl/certs/ca-bundle.crt"

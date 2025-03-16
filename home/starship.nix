@@ -1,4 +1,4 @@
-{  config, pkgs, lib, ... }: {
+{ config, pkgs, lib, ... }: {
   programs.starship = {
     enable = true;
 
@@ -6,7 +6,7 @@
     enableZshIntegration = true;
     settings = {
       add_newline = true;
-      
+
       format = lib.concatStrings [
         "$username"
         "$hostname"

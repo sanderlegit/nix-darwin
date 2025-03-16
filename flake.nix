@@ -17,235 +17,238 @@
   };
 
   outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager, nix-homebrew }:
-  let
+    let
       # TODO replace with your own username, email, system, and hostname
-    username = "sander";
-    useremail = "sander@aaadataplumbing.com";
-    system = "aarch64-darwin";
-    hostname = "lattice";
+      username = "sander";
+      useremail = "sander@aaadataplumbing.com";
+      system = "aarch64-darwin";
+      hostname = "lattice";
 
-    specialArgs =
-      inputs
-      // {
-        inherit username useremail hostname;
-      };
-    configuration = { pkgs, config, ... }: {
-
-      nixpkgs.config.allowUnfree = true;
-
-      # List packages installed in system profile. To search by name, run:
-      # $ nix-env -qaP | grep wget
-      environment.systemPackages =
-        [
-          # fix aliases for macos
-          pkgs.mkalias
-
-          pkgs.alacritty     # terminal
-          pkgs.lazygit
-          pkgs.lazydocker
-          pkgs.aerospace     # i3 style windows
-          pkgs.tmux          # multiplex term
-          pkgs.zellij        # multiplex term
-          pkgs.helix         # editor
-          pkgs.lsp-ai
-          pkgs.neovim        # editor
-          pkgs.nil           # nix lsp
-          pkgs.yazi          # file explore
-          pkgs.broot         # file explore
-          pkgs.zsh
-          pkgs.oh-my-zsh
-          # pkgs.starship
-          pkgs.skim
-          pkgs.fzf
-          pkgs.ripgrep
-          # pkgs.fzf-obc
-          pkgs.fzf-make
-          pkgs.fzf-git-sh
-          pkgs.aider-chat
-          pkgs.nushell
-          pkgs.sd            # better sed
-          pkgs.fd            # better find
-          pkgs.bat           # better cat
-          pkgs.bottom        # sysmonitor
-          pkgs.du-dust       # diskusage
-          pkgs.mosh          # betterssh
-          # pkgs.docker        # macos also needs  https://docs.docker.com/desktop/release-notes/
-          pkgs.dive          # docker inspect
-          pkgs.kubectl
-          # pkgs.helm # not supported, using brew
-          pkgs.minikube
-          pkgs.k9s
-          pkgs.ollama        # local ml
-          pkgs.awscli2
-          pkgs.awsls
-          pkgs.aws-sam-cli   # lambda cli
-          pkgs.gh
-          pkgs.aws-sso-cli
-          pkgs.parquet-tools
-          pkgs.difftastic
-          pkgs.aichat
-          pkgs.croc
-          pkgs.pqrs
-          pkgs.gomplate
-          pkgs.yq-go
-          pkgs.terraform-ls
-          pkgs.gitui
-          pkgs.nushell
-          # pkgs.snowflake-cli
-
-          ## Go
-          pkgs.go
-          pkgs.gopls
-          pkgs.protobuf
-          pkgs.protoc-gen-go
-          pkgs.protoc-gen-go-grpc
-          pkgs.protoc-gen-rust
-          pkgs.protoc-gen-rust-grpc
-          pkgs.protoc-gen-tonic
-          pkgs.protoc-gen-prost
-
-          #java
-          pkgs.openjdk
-
-          ## Rust
-          # run to setup toolcahin
-          # $ rustup default stable
-          # $ rustup component add rust-analyzer
-          pkgs.rustup
-          pkgs.clippy
-          pkgs.zig
-
-          ## TS
-          pkgs.nodejs_22
-          pkgs.nodePackages.aws-cdk
-          # pkgs.nodePackages_latest.nodejs
-          # pkgs.nodePackages_latest.aws-cdk
-          pkgs.typescript-language-server
-
-          ## Py
-          # run, to create venv with py version, and edit pyproject toml
-          # $ python3.11 -m venv "venv"
-          # $ source ./venv/bin/activate
-          # $ poetry init
-          # $ poetry add {pkg}
-           
-          # run, when in dir of pyproject.toml
-          # $ poetry env use python
-          # $ poetry install
-          # $ $(poetry env activate)
-          pkgs.poetry
-          pkgs.python3
-          pkgs.python3Packages.virtualenv
-          pkgs.python311
-          pkgs.python312
-          pkgs.python312Packages.pip
-          pkgs.python312Packages.ruff
-          pkgs.python312Packages.python-lsp-server
-          pkgs.python312Packages.jedi-language-server
-          pkgs.python312Packages.playwright
-
-        ];
-
-      # Create /etc/zshrc that loads the nix-darwin environment.
-      # this is required if you want to use darwin's default shell - zsh
-      homebrew = {
-        enable = true;
-        brews = [
-          "cfn-lint"
-      	  "wget"
-      	  "curl"
-          "mas"
-          "helm"
-          "patchelf"
-          "watch"
-        ];
-        casks = [
-      	  #"aria2"
-      	  #"httpie"
-      	  #"insomnia"
-      	  #"wireshark"
-      	  "inkdrop"
-          "hammerspoon"
-          "firefox"
-          "iina"
-          "the-unarchiver"
-          "alacritty"
-          "ghostty"
-      	  "signal"
-      	  "keepassxc"
-      	  "topnotch"
-      	  "betterdisplay"
-      	  "vivid"
-          "mullvadvpn"
-          "slack"
-          "spotify"
-          "whatsapp"
-          "karabiner-elements"
-        ];
-        masApps = {
-          # "Yoink" = 457622435;
+      specialArgs =
+        inputs
+        // {
+          inherit username useremail hostname;
         };
-        onActivation.cleanup = "zap";
+      configuration = { pkgs, config, ... }: {
+
+        nixpkgs.config.allowUnfree = true;
+
+        # List packages installed in system profile. To search by name, run:
+        # $ nix-env -qaP | grep wget
+        environment.systemPackages =
+          [
+            # fix aliases for macos
+            pkgs.mkalias
+
+            pkgs.alacritty # terminal
+            pkgs.lazygit
+            pkgs.lazydocker
+            pkgs.aerospace # i3 style windows
+            pkgs.tmux # multiplex term
+            pkgs.zellij # multiplex term
+            pkgs.helix # editor
+            pkgs.lsp-ai
+            pkgs.neovim # editor
+            pkgs.nil # nix lsp
+            pkgs.yazi # file explore
+            pkgs.broot # file explore
+            pkgs.zsh
+            pkgs.oh-my-zsh
+            # pkgs.starship
+            pkgs.skim
+            pkgs.fzf
+            pkgs.ripgrep
+            # pkgs.fzf-obc
+            pkgs.fzf-make
+            pkgs.fzf-git-sh
+            pkgs.aider-chat
+            pkgs.nushell
+            pkgs.sd # better sed
+            pkgs.fd # better find
+            pkgs.bat # better cat
+            pkgs.bottom # sysmonitor
+            pkgs.du-dust # diskusage
+            pkgs.mosh # betterssh
+            # pkgs.docker        # macos also needs  https://docs.docker.com/desktop/release-notes/
+            pkgs.dive # docker inspect
+            pkgs.kubectl
+            # pkgs.helm # not supported, using brew
+            pkgs.minikube
+            pkgs.k9s
+            pkgs.ollama # local ml
+            pkgs.awscli2
+            pkgs.awsls
+            pkgs.aws-sam-cli # lambda cli
+            pkgs.gh
+            pkgs.aws-sso-cli
+            pkgs.parquet-tools
+            pkgs.difftastic
+            pkgs.aichat
+            pkgs.croc
+            pkgs.pqrs
+            pkgs.gomplate
+            pkgs.yq-go
+            pkgs.terraform-ls
+            pkgs.gitui
+            pkgs.nushell
+            pkgs.silver-searcher
+            # pkgs.snowflake-cli
+
+            ## Go
+            pkgs.go
+            pkgs.gopls
+            pkgs.protobuf
+            pkgs.protoc-gen-go
+            pkgs.protoc-gen-go-grpc
+            pkgs.protoc-gen-rust
+            pkgs.protoc-gen-rust-grpc
+            pkgs.protoc-gen-tonic
+            pkgs.protoc-gen-prost
+
+            #java
+            pkgs.openjdk
+
+            ## Rust
+            # run to setup toolcahin
+            # $ rustup default stable
+            # $ rustup component add rust-analyzer
+            pkgs.rustup
+            pkgs.clippy
+            pkgs.zig
+
+            ## TS
+            pkgs.nodejs_22
+            pkgs.nodejs_18
+            pkgs.yarn-berry
+            pkgs.nodePackages.aws-cdk
+            pkgs.typescript-language-server
+
+            ## Py
+            # run, to create venv with py version, and edit pyproject toml
+            # $ python3.11 -m venv "venv"
+            # $ source ./venv/bin/activate
+            # $ poetry init
+            # $ poetry add {pkg}
+
+            # run, when in dir of pyproject.toml
+            # $ poetry env use python
+            # $ poetry install
+            # $ $(poetry env activate)
+            pkgs.poetry
+            pkgs.python3
+            pkgs.python3Packages.virtualenv
+            pkgs.python311
+            pkgs.python312
+            pkgs.python312Packages.pip
+            pkgs.python312Packages.ruff
+            pkgs.python312Packages.python-lsp-server
+            pkgs.python312Packages.jedi-language-server
+            pkgs.python312Packages.playwright
+
+          ];
+
+        # Create /etc/zshrc that loads the nix-darwin environment.
+        # this is required if you want to use darwin's default shell - zsh
+        homebrew = {
+          enable = true;
+          brews = [
+            "cfn-lint"
+            "wget"
+            "curl"
+            "mas"
+            "helm"
+            "patchelf"
+            "watch"
+          ];
+          casks = [
+            #"aria2"
+            #"httpie"
+            #"insomnia"
+            #"wireshark"
+            "inkdrop"
+            "hammerspoon"
+            "firefox"
+            "iina"
+            "the-unarchiver"
+            "alacritty"
+            "ghostty"
+            "signal"
+            "keepassxc"
+            "topnotch"
+            "betterdisplay"
+            "vivid"
+            "mullvadvpn"
+            "slack"
+            "spotify"
+            "whatsapp"
+            "karabiner-elements"
+          ];
+          masApps = {
+            # "Yoink" = 457622435;
+          };
+          onActivation.cleanup = "zap";
+        };
+
+        nixpkgs.overlays = [
+          (import ./overlays/helix.nix)
+        ];
+
+        # Add ability to used TouchID for sudo authentication
+        # security.pam.enableSudoTouchIdAuth = true;
+
+        # Auto upgrade nix package and the daemon service.
+        services.nix-daemon.enable = true;
+        # nix.package = pkgs.nix;
+
+        # Necessary for using flakes on this system.
+        nix.settings.experimental-features = "nix-command flakes";
+
+        environment.shells = [ pkgs.zsh ];
+
+
+        # The platform the configuration will be used on.
+        nixpkgs.hostPlatform = "aarch64-darwin";
+
+        # Set Git commit hash for darwin-version.
+        system.configurationRevision = self.rev or self.dirtyRev or null;
+      };
+    in
+    {
+      # Build darwin flake using:
+      # $ darwin-rebuild build --flake .#simple
+      darwinConfigurations."m4" = nix-darwin.lib.darwinSystem {
+        modules = [
+          ./modules/system.nix
+          ./modules/zsh.nix
+
+          configuration
+          nix-homebrew.darwinModules.nix-homebrew
+          {
+            nix-homebrew = {
+              enable = true;
+              # Apple Silicon Only
+              enableRosetta = true;
+              # User owning the Homebrew prefix
+              user = "sander";
+            };
+          }
+
+          # home manager
+          home-manager.darwinModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = specialArgs;
+            home-manager.users.sander = import ./home;
+            users.users.sander.home = "/Users/sander";
+          }
+
+        ];
       };
 
-      nixpkgs.overlays = [
-        (import ./overlays/helix.nix)
-      ];
-
-      # Add ability to used TouchID for sudo authentication
-      # security.pam.enableSudoTouchIdAuth = true;
-
-      # Auto upgrade nix package and the daemon service.
-      services.nix-daemon.enable = true;
-      # nix.package = pkgs.nix;
-
-      # Necessary for using flakes on this system.
-      nix.settings.experimental-features = "nix-command flakes";
-
-      environment.shells = [ pkgs.zsh ];
-
-
-      # The platform the configuration will be used on.
-      nixpkgs.hostPlatform = "aarch64-darwin";
-
-      # Set Git commit hash for darwin-version.
-      system.configurationRevision = self.rev or self.dirtyRev or null;
+      # Expose the package set, including overlays, for convenience.
+      darwinPackages = self.darwinConfigurations."m4".pkgs;
+      # Add formatter for nix fmt command
+      formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixpkgs-fmt;
     };
-  in
-  {
-    # Build darwin flake using:
-    # $ darwin-rebuild build --flake .#simple
-    darwinConfigurations."m4" = nix-darwin.lib.darwinSystem {
-      modules = [
-        ./modules/system.nix
-        ./modules/zsh.nix
-
-        configuration
-        nix-homebrew.darwinModules.nix-homebrew
-        {
-          nix-homebrew = {
-            enable = true;
-            # Apple Silicon Only
-            enableRosetta = true;
-            # User owning the Homebrew prefix
-            user = "sander";
-          };
-        }
-
-        # home manager
-        home-manager.darwinModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = specialArgs;
-          home-manager.users.sander = import ./home;
-          users.users.sander.home = "/Users/sander";
-        }
-
-      ];
-    };
-
-    # Expose the package set, including overlays, for convenience.
-    darwinPackages = self.darwinConfigurations."m4".pkgs;
-  };
 }
