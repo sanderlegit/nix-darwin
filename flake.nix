@@ -92,6 +92,7 @@
             pkgs.gitui
             pkgs.nushell
             pkgs.silver-searcher
+            pkgs.mold # faster linker, fasater compilation
             # pkgs.snowflake-cli
 
             ## Go
@@ -182,6 +183,8 @@
             "spotify"
             "whatsapp"
             "karabiner-elements"
+            "chromium"
+            "sysex-librarian"
           ];
           masApps = {
             # "Yoink" = 457622435;

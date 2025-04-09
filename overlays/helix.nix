@@ -32,14 +32,16 @@ final: prev: {
     src = prev.fetchFromGitHub {
       owner = "sanderlegit";
       repo = "helix";
-      rev = "db703b07a21f309ae91a9916951e091f8485ef5f";
-      hash = "sha256-//wn2MLSS0iK2IJLmvyxS4uv7/8Aql76vldgYvWFkAk=";
+      rev = "79433382f76f38a0816f65df7ea974eec7fb040c";
+      # hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      hash = "sha256-n98J1eD4KoSd/muaOVel5TTExszzPcIE7Z0dtWrDR+I=";
     };
 
     cargoDeps = oldAttrs.cargoDeps.overrideAttrs (prev.lib.const {
       name = "helix-vendor.tar.gz";
       inherit src;
-      outputHash = "sha256-H3jFVK5G/BHBNfUto2TzblnfyV879olOgFbG9pfMtnQ=";
+      # outputHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      outputHash = "sha256-cdSZbyA48KRjPpFqu33QB6V4wUhWRHJ3DRV9HC6Srx0=";
     });
 
     # Required for fetching git dependencies during build

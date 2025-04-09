@@ -122,9 +122,15 @@
       export ZELLIX_MOD="$HOME/dotfiles/zellix"
 
       function te() {
-          zellij ac rename-tab "hx $(basename "$(pwd)")"
-          nu $ZELLIX_MOD/run.nu $ZELLIX_MOD/example $@
+        # zellij ac rename-tab "hx $(basename "$(pwd)")"
+        nu $ZELLIX_MOD/run.nu $ZELLIX_MOD/example $@
       }
+
+      function pop {
+        zellij ac rename-tab "$(basename "$(pwd)")"
+        zellij run -f -x 0 -y 0 --width 100% --height 100% -- nu $ZELLIX_MOD/run.nu $ZELLIX_MOD/example
+      }
+
 
       export EDITOR=hx
       export PREVIEW_SH=$HOME/dotfiles/preview.sh
@@ -135,22 +141,22 @@
 
       function k9s() {
         context=$(kubectl config current-context | cut -c 1-10);
-        zellij ac rename-tab "k9s $context";
+        # zellij ac rename-tab "k9s $context";
         command k9s
       }
 
       function lg() {
-          zellij ac rename-tab "lg"
+          # zellij ac rename-tab "lg"
           command lazygit
       }
 
       function gitui() {
-          zellij ac rename-tab "gitui"
+          # zellij ac rename-tab "gitui"
           command gitui
       }
 
       function ld() {
-          zellij ac rename-tab "ld"
+          # zellij ac rename-tab "ld"
           command lazydocker
       }
 
@@ -265,6 +271,37 @@
 
       export ANTHROPIC_API_KEY="FILL"
 
+      function direnv-new() {
+        nix flake new -t github:nix-community/nix-direnv ./;
+        direnv allow
+
+        # Check if we're in a git repository
+        if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+          # Determine the git root directory
+          GIT_ROOT=$(git rev-parse --show-toplevel)
+  
+          # Path to the .gitignore file
+          GITIGNORE_PATH="$GIT_ROOT/.gitignore"
+  
+          # Create .gitignore if it doesn't exist
+          if [ ! -f "$GITIGNORE_PATH" ]; then
+            touch "$GITIGNORE_PATH"
+            echo "Created .gitignore file"
+          fi
+  
+          # Check if .direnv is already in .gitignore
+          if grep -q "^.direnv$\|^.direnv/$" "$GITIGNORE_PATH"; then
+            echo ".direnv is already in .gitignore"
+          else
+            # Add .direnv to .gitignore
+            echo ".direnv/" >> "$GITIGNORE_PATH"
+            echo "Added '.direnv/' to .gitignore"
+          fi
+        else
+          echo "Error: Not in a git repository"
+          exit 1
+        fi
+      }
     '';
 
     shellAliases = {

@@ -103,3 +103,17 @@ ln -s ~/.aerospace.toml ~/dotfiles/home/.aerospace.toml
 - https://github.com/knl/dotskel
 - https://github.com/shaunsingh/nix-darwin-dotfiles
 - https://github.com/AlexNabokikh/nix-config
+
+# Using Direnv
+Setup a new direnv with 
+```
+nix flake new -t github:nix-community/nix-direnv ./
+```
+This creates
+```
+.direnv
+.envrc
+flake.lock
+flake.nix
+```
+Which will be loaded automatically assuming you have direnv installed
