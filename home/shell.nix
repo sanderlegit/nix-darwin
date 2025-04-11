@@ -16,6 +16,7 @@
     autosuggestion.enable = true;
 
     initExtra = ''
+
       # First, ensure completion system is initiaized
       autoload -Uz +X compinit && compinit
       autoload -Uz +X bashcompinit && bashcompinit
@@ -199,6 +200,8 @@
         export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_ed25519_unit6"
       }
 
+      u6-env
+
       ## Aliases
       alias l="eza -la"
       alias ll="eza -la"
@@ -269,8 +272,6 @@
 
       # END_AWS_SSO_CLI
 
-      export ANTHROPIC_API_KEY="FILL"
-
       function direnv-new() {
         nix flake new -t github:nix-community/nix-direnv ./;
         direnv allow
@@ -301,6 +302,90 @@
           echo "Error: Not in a git repository"
           exit 1
         fi
+      }
+
+      # Function to get PR URL and copy using OSC52
+      prl() {
+        pr_url=$(gh pr view --json url --jq .url)
+        if [ $? -eq 0 ]; then
+          printf "\033]52;c;$(echo -n "$pr_url" | base64)\a"
+          echo "PR URL copied to clipboard: $pr_url"
+        else
+          echo "Failed to get PR URL. Make sure you're in a git repository with an open PR."
+        fi
+      }
+
+      # Function to edit PR description in your default editor
+      # If PR_NUMBER is empty, default behaviour follows
+      # Usage: predit [PR_NUMBER]
+      prb() {
+        # Check if gh is installed
+        if ! command -v gh &> /dev/null; then
+          echo "Error: GitHub CLI (gh) is not installed. Please install it first."
+          return 1
+        fi
+
+        # Check if a PR number was provided as an argument, otherwise use current branch
+        if [ "$1" ]; then
+          PR_SELECTOR="$1"
+        else
+          PR_SELECTOR=""
+        fi
+
+        # Create a temporary file
+        TEMP_FILE=$(mktemp /tmp/pr-body-XXXXXX.md)
+
+        # Get the current PR body and save to the temporary file
+        echo "Fetching current PR description..."
+        gh pr view $PR_SELECTOR --json body --jq .body > "$TEMP_FILE"
+
+        if [ $? -ne 0 ]; then
+          echo "Error: Failed to get PR description. Make sure you're in a repository with a PR or provide a valid PR number."
+          rm "$TEMP_FILE"
+          return 1
+        fi
+
+        # Get the original file modification time
+        ORIGINAL_MTIME=$(stat -c %Y "$TEMP_FILE" 2>/dev/null || stat -f %m "$TEMP_FILE")
+
+        # Open the temporary file in the default editor
+        echo "Opening PR description in your default editor. Make your changes and save the file..."
+        $${VISUAL:-$${EDITOR:-vi}} "$TEMP_FILE"
+
+        # Get the new file modification time
+        NEW_MTIME=$(stat -c %Y "$TEMP_FILE" 2>/dev/null || stat -f %m "$TEMP_FILE")
+
+        # Check if the file was modified
+        if [ "$ORIGINAL_MTIME" = "$NEW_MTIME" ]; then
+          echo "No changes were made. PR description not updated."
+          rm "$TEMP_FILE"
+          return 0
+        fi
+
+        # Update the PR body with the edited content
+        echo "Updating PR description..."
+        gh pr edit $PR_SELECTOR --body-file "$TEMP_FILE"
+
+        if [ $? -eq 0 ]; then
+          echo "PR description updated successfully!"
+        else
+          echo "Error: Failed to update PR description."
+          echo "Your changes are saved in: $TEMP_FILE"
+          return 1
+        fi
+
+        # Clean up
+        rm "$TEMP_FILE"
+      }
+
+      # yazi
+      function c() {
+      	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+      	yazi "$@" --cwd-file="$tmp"
+      	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+      		builtin cd -- "$cwd"
+      	fi
+      	rm -f -- "$tmp"
       }
     '';
 
