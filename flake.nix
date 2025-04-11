@@ -106,6 +106,8 @@
             pkgs.protoc-gen-tonic
             pkgs.protoc-gen-prost
 
+            pkgs.vscode-langservers-extracted
+
             #java
             pkgs.openjdk
 
@@ -194,6 +196,7 @@
 
         nixpkgs.overlays = [
           (import ./overlays/helix.nix)
+          (import ./overlays/lazygit.nix)
         ];
 
         # Add ability to used TouchID for sudo authentication
