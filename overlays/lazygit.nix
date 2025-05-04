@@ -24,8 +24,9 @@ final: prev: {
     src = prev.fetchFromGitHub {
       owner = "sanderlegit";
       repo = "lazygit";
-      rev = "e293243b2f2515807a2b73df298990dfdb4b475e";
-      hash = "sha256-YkWk8z4kuGXC4XtsBTo+7P3QFvsIadX9F8x2yWoK8AU=";
+      rev = "b7c8501a920482164d06bcd64719933e9501511a";
+      # hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      hash = "sha256-w/+ZO0MYbe7Jsm/mG7LNAXaDXa9zbkfjyJuIQt7b0Zc=";
     };
 
     # Explicitly add our overridden Go to build inputs

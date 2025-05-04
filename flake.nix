@@ -55,23 +55,25 @@
             pkgs.zsh
             pkgs.oh-my-zsh
             # pkgs.starship
-            pkgs.skim
-            pkgs.fzf
+            # pkgs.skim
+            # pkgs.fzf
             pkgs.ripgrep
             # pkgs.fzf-obc
-            pkgs.fzf-make
-            pkgs.fzf-git-sh
+            # pkgs.fzf-make
+            # pkgs.fzf-git-sh
             pkgs.aider-chat
             pkgs.nushell
             pkgs.sd # better sed
             pkgs.fd # better find
             pkgs.bat # better cat
             pkgs.bottom # sysmonitor
+            pkgs.htop # sysmonitor
             pkgs.du-dust # diskusage
             pkgs.mosh # betterssh
             # pkgs.docker        # macos also needs  https://docs.docker.com/desktop/release-notes/
             pkgs.dive # docker inspect
             pkgs.kubectl
+            pkgs.eksctl
             # pkgs.helm # not supported, using brew
             pkgs.minikube
             pkgs.k9s
@@ -108,6 +110,8 @@
 
             pkgs.vscode-langservers-extracted
 
+            pkgs.google-cloud-sdk
+
             #java
             pkgs.openjdk
 
@@ -125,6 +129,7 @@
             pkgs.yarn-berry
             pkgs.nodePackages.aws-cdk
             pkgs.typescript-language-server
+            pkgs.yaml-language-server
 
             ## Py
             # run, to create venv with py version, and edit pyproject toml
@@ -138,6 +143,7 @@
             # $ poetry install
             # $ $(poetry env activate)
             pkgs.poetry
+            pkgs.uv
             pkgs.python3
             pkgs.python3Packages.virtualenv
             pkgs.python311
@@ -147,6 +153,11 @@
             pkgs.python312Packages.python-lsp-server
             pkgs.python312Packages.jedi-language-server
             pkgs.python312Packages.playwright
+            pkgs.python312Packages.cfn-lint
+            pkgs.jupyter-all
+
+            pkgs.nyaa # torrent client
+            pkgs.pandoc_3_6
 
           ];
 
@@ -162,6 +173,7 @@
             "helm"
             "patchelf"
             "watch"
+            "cloudformation-guard"
           ];
           casks = [
             #"aria2"
@@ -195,22 +207,14 @@
         };
 
         nixpkgs.overlays = [
-          (import ./overlays/helix.nix)
+          # (import ./overlays/helix.nix)
           (import ./overlays/lazygit.nix)
         ];
-
-        # Add ability to used TouchID for sudo authentication
-        # security.pam.enableSudoTouchIdAuth = true;
-
-        # Auto upgrade nix package and the daemon service.
-        services.nix-daemon.enable = true;
-        # nix.package = pkgs.nix;
 
         # Necessary for using flakes on this system.
         nix.settings.experimental-features = "nix-command flakes";
 
         environment.shells = [ pkgs.zsh ];
-
 
         # The platform the configuration will be used on.
         nixpkgs.hostPlatform = "aarch64-darwin";

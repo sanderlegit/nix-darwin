@@ -3,11 +3,12 @@
 
   programs.fzf = {
     enable = true;
-    enableZshIntegration = true;
-    defaultCommand = "rg --files";
-    defaultOptions = [ "--height 40%" "--layout=reverse" "--border" ];
-    fileWidgetCommand = "rg --files";
-    historyWidgetOptions = [ "--sort" "--exact" ];
+    enableZshIntegration = false; # configured manually
+  };
+
+  programs.skim = {
+    enable = true;
+    enableZshIntegration = false; # prevent skim trying to integrate with zsh
   };
 
   programs.zsh = {
@@ -15,58 +16,97 @@
     enableCompletion = true;
     autosuggestion.enable = true;
 
-    initExtra = ''
-
-      # First, ensure completion system is initiaized
+    # Ensure bash completion support is loaded before completionInit runs
+    initExtraBeforeCompInit = ''
       autoload -Uz +X compinit && compinit
-      autoload -Uz +X bashcompinit && bashcompinit
+      autoload -Uz bashcompinit && bashcompinit
+    '';
 
-      # Enable additional zsh settings that fzf-tab depends on
-      # zstyle ':completion:*' menu select
-      # zmodload zsh/complist
+    plugins = [
+      { name = "fzf-tab"; src = pkgs.zsh-fzf-tab; }
+      { name = "zsh-syntax-highlighting"; src = pkgs.zsh-syntax-highlighting; }
+    ];
+
+    # Add specific completion commands *after* the main completion system is initialized
+    completionInit = ''
+      # AWS CLI v2 completion using the Nix package path
+      # Using pkgs.lib.getExe is slightly more robust than hardcoding /bin/
+      local aws_completer_path="/run/current-system/sw/bin/aws_completer"
+      if [[ -x "$aws_completer_path" ]]; then
+        complete -C "$aws_completer_path" aws
+      fi
 
       ## FZF
       # Source fzf completion and keybindings first
-      #if [[ -f ${pkgs.fzf}/share/fzf/completion.zsh ]]; then
-      #source ${pkgs.fzf}/share/fzf/completion.zsh
-      #fi
       if [[ -f ${pkgs.fzf}/share/fzf/key-bindings.zsh ]]; then
-      source ${pkgs.fzf}/share/fzf/key-bindings.zsh
+        source ${pkgs.fzf}/share/fzf/key-bindings.zsh
       fi
 
-      # Then source fzf-tab
-      #if [[ -f ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh ]]; then
-      #source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
-      #fi
+      if [[ -f ${pkgs.fzf}/share/fzf/completion.zsh ]]; then
+        source ${pkgs.fzf}/share/fzf/completion.zsh
+      fi
+
+      # # Ensure config is loaded properly
+      # source <(fzf --zsh)
 
       # Configure fzf behavior
-      export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border"
+      export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --style minimal"
       export FZF_CTRL_R_OPTS="--sort --exact"
       export FZF_DEFAULT_COMMAND='rg --files'
       export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
+      # Bind Ctrl+R to fuzzy history search
+      bindkey '^R' fzf-history-widget
+      # bindkey '^R' fzf-history-widget
+
+      # Bind Ctrl+T to fuzzy file search
+      bindkey '^T' fzf-file-widget
+      # bindkey '^T' fzf-file-widget
+
+      # Keep your existing binding for ç (Alt+C is another common cd binding: '\ec')
       # MacOS Alt-C char
       bindkey "ç" fzf-cd-widget
+
+      zstyle ':completion:*' menu select
+      zmodload zsh/complist
+      # zstyle ':completion:*' matcher-list ''' \
+      #  'm:{a-z\-}={A-Z\_}' \
+      #  'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
+      #  'r:|?=** m:{a-z\-}={A-Z\_}'
+
+      __aws_sso_profile_complete() {
+           local _args=''${AWS_SSO_HELPER_ARGS:- -L error}
+          _multi_parts : "($(/nix/store/s5s6si3kmz8k15vm9v6d5qk3mpa546cc-aws-sso-cli-1.17.0/bin/.aws-sso-wrapped ''${=_args} list --csv Profile))"
+      }
+
+      compdef __aws_sso_profile_complete aws-sso-profile
+      complete -C /nix/store/s5s6si3kmz8k15vm9v6d5qk3mpa546cc-aws-sso-cli-1.17.0/bin/.aws-sso-wrapped aws-sso
+
+    '';
+
+    initExtra = ''
+
+      export XDG_CONFIG_HOME=~/.config/
 
       # Path configurations
       export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/go/bin:$HOME/.docker/bin"
 
-      # Load completion system
-      autoload -Uz compinit
-      compinit
+      # # Load completion system
+      # autoload -Uz compinit
+      # compinit
 
-      # Enable menu selection in completion
-      zstyle ':completion:*' menu select
-      zmodload zsh/complist
+      # # Enable menu selection in completion
+      # zstyle ':completion:*' menu select
+      # zmodload zsh/complist
 
       # 0 -- vanilla completion (abc => abc)
       # 1 -- smart case completion (abc => Abc)
       # 2 -- word flex completion (abc => A-big-Car)
       # 3 -- full flex completion (abc => ABraCadabra)
-      zstyle ':completion:*' matcher-list ''' \
-        'm:{a-z\-}={A-Z\_}' \
-        'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
-        'r:|?=** m:{a-z\-}={A-Z\_}'
+      # zstyle ':completion:*' matcher-list ''' \
+      #   'm:{a-z\-}={A-Z\_}' \
+      #   'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
+      #   'r:|?=** m:{a-z\-}={A-Z\_}'
 
 
       # Python Poetry functions
@@ -130,8 +170,8 @@
       function pop {
         zellij ac rename-tab "$(basename "$(pwd)")"
         zellij run -f -x 0 -y 0 --width 100% --height 100% -- nu $ZELLIX_MOD/run.nu $ZELLIX_MOD/example
+        # zellij run -f -x 0 -y 0 --width 100% --height 100% -- hx
       }
-
 
       export EDITOR=hx
       export PREVIEW_SH=$HOME/dotfiles/preview.sh
@@ -173,18 +213,21 @@
       function drc() {
         zellij ac rename-tab "dotfiles"
         cd ~/dotfiles/ && nu $ZELLIX_MOD/run.nu $ZELLIX_MOD/example
+        # cd ~/dotfiles/ && hx
         cd -
       }
 
       ## nix 
-      # 
+
       function nre() {
         darwin-rebuild switch --flake ~/nix#m4 --show-trace -v
       }
+
       function nrc() {
         zellij ac rename-tab "nix-config"
         cd $HOME/nix/
-        nu $ZELLIX_MOD/run.nu $ZELLIX_MOD/example \
+        # nu $ZELLIX_MOD/run.nu $ZELLIX_MOD/example \
+        hx \
          $HOME/nix/home/shell.nix \
          $HOME/nix/flake.nix && \
          darwin-rebuild switch --flake ~/nix#m4 --show-trace -v
@@ -200,13 +243,18 @@
         export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_ed25519_unit6"
       }
 
-      u6-env
+      # u6-env
+
+      export VERTEXAI_PROJECT=gen-lang-client-0342800361
+      export VERTEXAI_LOCATION=us-central1
 
       ## Aliases
       alias l="eza -la"
       alias ll="eza -la"
       alias ld="lazydocker"
-      alias ai="aider --no-attribute-author --no-attribute-committer --dark-mode"
+      # alias ai="aider --no-attribute-author --no-attribute-committer --dark-mode"
+      alias ai="uv run --no-project -p $HOME/.config/google-ai/.venv/bin/python aider --no-attribute-author --no-attribute-committer --dark-mode --model gemini-2.5-pro-preview-03-25"
+      alias oi="aichat -m ollama:gemma3:27b"
       # alias air='~/.air'
 
       alias cu="cd .. && ll"
@@ -235,11 +283,6 @@
       # above, place it OUTSIDE of the BEGIN/END_AWS_SSO_CLI markers
       # and of course uncomment it
 
-      __aws_sso_profile_complete() {
-           local _args=''${AWS_SSO_HELPER_ARGS:- -L error}
-          _multi_parts : "($(/nix/store/s5s6si3kmz8k15vm9v6d5qk3mpa546cc-aws-sso-cli-1.17.0/bin/.aws-sso-wrapped ''${=_args} list --csv Profile))"
-      }
-
       aws-sso-profile() {
           local _args=''${AWS_SSO_HELPER_ARGS:- -L error}
           if [ -n "$AWS_PROFILE" ]; then
@@ -266,9 +309,6 @@
           fi
           eval $(/nix/store/s5s6si3kmz8k15vm9v6d5qk3mpa546cc-aws-sso-cli-1.17.0/bin/.aws-sso-wrapped ''${=_args} eval -c)
       }
-
-      compdef __aws_sso_profile_complete aws-sso-profile
-      complete -C /nix/store/s5s6si3kmz8k15vm9v6d5qk3mpa546cc-aws-sso-cli-1.17.0/bin/.aws-sso-wrapped aws-sso
 
       # END_AWS_SSO_CLI
 

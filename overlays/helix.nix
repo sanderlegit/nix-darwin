@@ -32,17 +32,27 @@ final: prev: {
     src = prev.fetchFromGitHub {
       owner = "sanderlegit";
       repo = "helix";
-      rev = "79433382f76f38a0816f65df7ea974eec7fb040c";
+      rev = "aec1594bb9335af00e9ed7526fc63ed40f4048c0";
       # hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-      hash = "sha256-n98J1eD4KoSd/muaOVel5TTExszzPcIE7Z0dtWrDR+I=";
+      hash = "sha256-Re3b7Jb2EuTqMA+kJNhoJS4rHv9fBIfDseBBJPjUguo=";
     };
 
-    cargoDeps = oldAttrs.cargoDeps.overrideAttrs (prev.lib.const {
-      name = "helix-vendor.tar.gz";
-      inherit src;
-      # outputHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-      outputHash = "sha256-cdSZbyA48KRjPpFqu33QB6V4wUhWRHJ3DRV9HC6Srx0=";
-    });
+    # cargoHash = "";
+
+    # cargoHash = builtins.trace oldAttrs.cargoDeps "wow";
+
+    # cargoDeps = oldAttrs.cargoDeps.overrideAttrs (prev.lib.const {
+    # cargoDeps = oldAttrs.cargoDeps.overrideAttrs (old: {
+    #   # name = "helix-vendor.tar.gz";
+    #   # inherit src;
+
+    #   outputHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    #   # outputHash = "sha256-cdSZbyA48KRjPpFqu33QB6V4wUhWRHJ3DRV9HC6Srx0=";
+    # });
+    #
+    # cargoDeps = oldAttrs.fetchCargoVendor.overrideAttrs (old: {
+    #   hash = "";
+    # });
 
     # Required for fetching git dependencies during build
     # start

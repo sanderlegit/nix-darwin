@@ -8,6 +8,7 @@
       add_newline = true;
 
       format = lib.concatStrings [
+        "$time"
         "$username"
         "$hostname"
         "$directory"
@@ -38,7 +39,7 @@
       };
 
       git_status = {
-        format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)";
+        format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style) ";
         style = "cyan";
         conflicted = "";
         untracked = "​";
@@ -66,8 +67,8 @@
       };
 
       hostname = {
-        ssh_only = true;
-        format = "[$hostname]($style) in ";
+        ssh_only = false;
+        format = "[$hostname]($style) - ";
         style = "bright-black";
       };
 
@@ -78,6 +79,14 @@
         show_always = false;
       };
 
+      time = {
+        disabled = false;
+        format = "[\\[$time\\]]($style) ";
+        time_format = "%T";
+        utc_time_offset = "1";
+        style = "yellow";
+        # time_range = "10:00:00-14:00:00"; # Note: time_range requires Starship v1.1.0+
+      };
       aws = {
         format = "on [$symbol$active(\($region\))]($style) ";
         symbol = "🅰 ";
