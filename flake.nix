@@ -59,9 +59,9 @@
             # pkgs.fzf
             pkgs.ripgrep
             # pkgs.fzf-obc
-            # pkgs.fzf-make
+            pkgs.fzf-make
             # pkgs.fzf-git-sh
-            pkgs.aider-chat
+            # pkgs.aider-chat
             pkgs.nushell
             pkgs.sd # better sed
             pkgs.fd # better find
@@ -94,8 +94,9 @@
             pkgs.gitui
             pkgs.nushell
             pkgs.silver-searcher
-            pkgs.mold # faster linker, fasater compilation
+            # pkgs.mold # faster linker, fasater compilation
             # pkgs.snowflake-cli
+            pkgs.yamllint
 
             ## Go
             pkgs.go
@@ -125,7 +126,7 @@
 
             ## TS
             pkgs.nodejs_22
-            pkgs.nodejs_18
+            # pkgs.nodejs_18
             pkgs.yarn-berry
             pkgs.nodePackages.aws-cdk
             pkgs.typescript-language-server
@@ -154,10 +155,12 @@
             pkgs.python312Packages.jedi-language-server
             pkgs.python312Packages.playwright
             pkgs.python312Packages.cfn-lint
+            pkgs.python312Packages.scrapy
             pkgs.jupyter-all
 
             pkgs.nyaa # torrent client
-            pkgs.pandoc_3_6
+            # pkgs.pandoc_3_6
+            pkgs.duckdb
 
           ];
 
@@ -174,6 +177,7 @@
             "patchelf"
             "watch"
             "cloudformation-guard"
+            "k9s"
           ];
           casks = [
             #"aria2"
@@ -221,6 +225,7 @@
 
         # Set Git commit hash for darwin-version.
         system.configurationRevision = self.rev or self.dirtyRev or null;
+        system.primaryUser = "sander";
       };
     in
     {

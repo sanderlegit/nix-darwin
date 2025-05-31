@@ -180,11 +180,11 @@
         te $(sk --ansi --cmd "rg --column --line-number --no-heading --color=always --smart-case --hidden ." --delimiter ":" --height "100%" --preview "bat --color=always {1} --highlight-line {2}" --preview-window "up:60%:border")
       }
 
-      function k9s() {
-        context=$(kubectl config current-context | cut -c 1-10);
-        # zellij ac rename-tab "k9s $context";
-        command k9s
-      }
+      # function k9s() {
+      #   context=$(kubectl config current-context | cut -c 1-10);
+      #   # zellij ac rename-tab "k9s $context";
+      #   command k9s
+      # }
 
       function lg() {
           # zellij ac rename-tab "lg"
@@ -253,7 +253,7 @@
       alias ll="eza -la"
       alias ld="lazydocker"
       # alias ai="aider --no-attribute-author --no-attribute-committer --dark-mode"
-      alias ai="uv run --no-project -p $HOME/.config/google-ai/.venv/bin/python aider --no-attribute-author --no-attribute-committer --dark-mode --model gemini-2.5-pro-preview-03-25"
+      alias ai="uv run --no-project -p $HOME/.config/google-ai/.venv/bin/python aider --no-attribute-author --no-attribute-committer --dark-mode --model gemini-2.5-pro-preview-05-06"
       alias oi="aichat -m ollama:gemma3:27b"
       # alias air='~/.air'
 
