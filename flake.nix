@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nix-darwin.url = "github:LnL7/nix-darwin";
+    nix-darwin.url = "github:nix-darwin/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     # home-manager, used for managing user configuration
     home-manager = {
@@ -40,11 +40,59 @@
             # fix aliases for macos
             pkgs.mkalias
 
+            pkgs.clang
+            pkgs.git
+            pkgs.zstd
+
+            ## Go
+            pkgs.go
+            pkgs.gopls
+            pkgs.protobuf
+            pkgs.protoc-gen-go
+            pkgs.protoc-gen-go-grpc
+            pkgs.protoc-gen-rust
+            pkgs.protoc-gen-rust-grpc
+            pkgs.protoc-gen-tonic
+            pkgs.protoc-gen-prost
+
+            pkgs.portaudio
+
+            pkgs.vscode-langservers-extracted
+
+            pkgs.google-cloud-sdk
+            pkgs.openssl
+            pkgs.postgresql
+
+            #java
+            pkgs.jdk17
+            pkgs.jdt-language-server
+            pkgs.kotlin-language-server
+            pkgs.gradle
+
+            ## Rust
+            # run to setup toolcahin
+            # $ rustup default stable
+            # $ rustup component add rust-analyzer
+            pkgs.rustup
+            pkgs.clippy
+            pkgs.zig
+            pkgs.libiconv # debug
+
+            ## TS
+            pkgs.nodejs_22
+            # pkgs.nodejs_18
+            pkgs.yarn-berry
+            pkgs.nodePackages.aws-cdk
+            pkgs.typescript-language-server
+            pkgs.yaml-language-server
+
+
             pkgs.alacritty # terminal
             pkgs.lazygit
             pkgs.lazydocker
             pkgs.aerospace # i3 style windows
             pkgs.tmux # multiplex term
+            # pkgs.wemux # easier multi user tmu
             pkgs.zellij # multiplex term
             pkgs.helix # editor
             pkgs.lsp-ai
@@ -75,9 +123,9 @@
             pkgs.kubectl
             pkgs.eksctl
             # pkgs.helm # not supported, using brew
-            pkgs.minikube
-            pkgs.k9s
-            pkgs.ollama # local ml
+            # pkgs.minikube
+            # pkgs.k9s
+            # pkgs.ollama # local ml
             pkgs.awscli2
             pkgs.awsls
             pkgs.aws-sam-cli # lambda cli
@@ -93,44 +141,12 @@
             pkgs.terraform-ls
             pkgs.gitui
             pkgs.nushell
+            pkgs.git-lfs
             pkgs.silver-searcher
             # pkgs.mold # faster linker, fasater compilation
             # pkgs.snowflake-cli
             pkgs.yamllint
 
-            ## Go
-            pkgs.go
-            pkgs.gopls
-            pkgs.protobuf
-            pkgs.protoc-gen-go
-            pkgs.protoc-gen-go-grpc
-            pkgs.protoc-gen-rust
-            pkgs.protoc-gen-rust-grpc
-            pkgs.protoc-gen-tonic
-            pkgs.protoc-gen-prost
-
-            pkgs.vscode-langservers-extracted
-
-            pkgs.google-cloud-sdk
-
-            #java
-            pkgs.openjdk
-
-            ## Rust
-            # run to setup toolcahin
-            # $ rustup default stable
-            # $ rustup component add rust-analyzer
-            pkgs.rustup
-            pkgs.clippy
-            pkgs.zig
-
-            ## TS
-            pkgs.nodejs_22
-            # pkgs.nodejs_18
-            pkgs.yarn-berry
-            pkgs.nodePackages.aws-cdk
-            pkgs.typescript-language-server
-            pkgs.yaml-language-server
 
             ## Py
             # run, to create venv with py version, and edit pyproject toml
@@ -158,8 +174,10 @@
             pkgs.python312Packages.scrapy
             pkgs.jupyter-all
 
+            pkgs.bdt # boring data tool
+
             pkgs.nyaa # torrent client
-            # pkgs.pandoc_3_6
+            pkgs.pandoc
             pkgs.duckdb
 
           ];
