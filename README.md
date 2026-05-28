@@ -117,3 +117,13 @@ flake.lock
 flake.nix
 ```
 Which will be loaded automatically assuming you have direnv installed
+
+
+
+Useful commands
+```
+nix-collect-garbage
+sudo nix-env --delete-generations +14d --profile /nix/var/nix/profiles/system
+nix flake update
+nix flake metadata
+```

@@ -47,13 +47,13 @@
             ## Go
             pkgs.go
             pkgs.gopls
-            pkgs.protobuf
-            pkgs.protoc-gen-go
-            pkgs.protoc-gen-go-grpc
-            pkgs.protoc-gen-rust
-            pkgs.protoc-gen-rust-grpc
-            pkgs.protoc-gen-tonic
-            pkgs.protoc-gen-prost
+            # pkgs.protobuf
+            # pkgs.protoc-gen-go
+            # pkgs.protoc-gen-go-grpc
+            # pkgs.protoc-gen-rust
+            # pkgs.protoc-gen-rust-grpc
+            # pkgs.protoc-gen-tonic
+            # pkgs.protoc-gen-prost
 
             pkgs.portaudio
 
@@ -76,7 +76,11 @@
             pkgs.rustup
             pkgs.clippy
             pkgs.zig
-            pkgs.libiconv # debug
+            pkgs.libiconv
+            pkgs.curl
+
+            ## Elixir
+            pkgs.beamMinimal28Packages.elixir_1_19
 
             ## TS
             pkgs.nodejs_22
@@ -86,10 +90,7 @@
             pkgs.typescript-language-server
             pkgs.yaml-language-server
 
-
             pkgs.alacritty # terminal
-            pkgs.lazygit
-            pkgs.lazydocker
             pkgs.aerospace # i3 style windows
             pkgs.tmux # multiplex term
             # pkgs.wemux # easier multi user tmu
@@ -124,7 +125,13 @@
             pkgs.eksctl
             # pkgs.helm # not supported, using brew
             # pkgs.minikube
+            #
+            # pkgs.lazydocker
             # pkgs.k9s
+            # pkgs.lazygit
+            # pkgs.gomplate
+            # pkgs.yq-go
+            #
             # pkgs.ollama # local ml
             pkgs.awscli2
             pkgs.awsls
@@ -136,8 +143,6 @@
             pkgs.aichat
             pkgs.croc
             pkgs.pqrs
-            pkgs.gomplate
-            pkgs.yq-go
             pkgs.terraform-ls
             pkgs.gitui
             pkgs.nushell
@@ -147,6 +152,7 @@
             # pkgs.snowflake-cli
             pkgs.yamllint
 
+            (pkgs.azure-cli.withExtensions [ pkgs.azure-cli.extensions.azure-devops ])
 
             ## Py
             # run, to create venv with py version, and edit pyproject toml
@@ -159,26 +165,28 @@
             # $ poetry env use python
             # $ poetry install
             # $ $(poetry env activate)
-            pkgs.poetry
+            # pkgs.poetry
             pkgs.uv
-            pkgs.python3
-            pkgs.python3Packages.virtualenv
-            pkgs.python311
-            pkgs.python312
-            pkgs.python312Packages.pip
-            pkgs.python312Packages.ruff
-            pkgs.python312Packages.python-lsp-server
-            pkgs.python312Packages.jedi-language-server
-            pkgs.python312Packages.playwright
-            pkgs.python312Packages.cfn-lint
-            pkgs.python312Packages.scrapy
-            pkgs.jupyter-all
+            # pkgs.python3
+            # pkgs.python3Packages.virtualenv
+            # pkgs.python311
+            # pkgs.python312
+            # pkgs.python312Packages.pip
+            # pkgs.python312Packages.ruff
+            # pkgs.python312Packages.python-lsp-server
+            # pkgs.python312Packages.jedi-language-server
+            # pkgs.python312Packages.playwright
+            # pkgs.python312Packages.cfn-lint
+            # pkgs.python312Packages.scrapy
+            # pkgs.jupyter-all
 
-            pkgs.bdt # boring data tool
+            # pkgs.bdt # boring data tool
 
-            pkgs.nyaa # torrent client
+            # pkgs.nyaa # torrent client
             pkgs.pandoc
             pkgs.duckdb
+
+            pkgs.just
 
           ];
 
@@ -196,8 +204,13 @@
             "watch"
             "cloudformation-guard"
             "k9s"
+            "lazydocker"
+            "lazygit"
+            "gomplate"
+            "yq"
           ];
           casks = [
+            "claude-code"
             #"aria2"
             #"httpie"
             #"insomnia"
@@ -214,13 +227,14 @@
             "topnotch"
             "betterdisplay"
             "vivid"
-            "mullvadvpn"
+            # "mullvadvpn"
             "slack"
             "spotify"
             "whatsapp"
             "karabiner-elements"
             "chromium"
             "sysex-librarian"
+            "tailscale"
           ];
           masApps = {
             # "Yoink" = 457622435;
@@ -228,10 +242,10 @@
           onActivation.cleanup = "zap";
         };
 
-        nixpkgs.overlays = [
-          # (import ./overlays/helix.nix)
-          (import ./overlays/lazygit.nix)
-        ];
+        # nixpkgs.overlays = [
+        #   # (import ./overlays/helix.nix)
+        #   (import ./overlays/lazygit.nix)
+        # ];
 
         # Necessary for using flakes on this system.
         nix.settings.experimental-features = "nix-command flakes";

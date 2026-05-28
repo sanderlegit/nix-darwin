@@ -61,11 +61,9 @@
           "/Applications/KeePassXC.app"
           "/Applications/Ghostty.app"
           "/Applications/Firefox.app"
-          "/System/Applications/Mail.app"
-          "/System/Applications/Calendar.app"
-          "/Applications/Slack.app"
           "/Applications/Signal.app"
           "/System/Applications/Messages.app"
+          "/Applications/Ableton Live 12 Suite.app"
         ];
         # customize Hot Corners(触发角, 鼠标移动到屏幕角落时触发的动作)
         #wvous-tl-corner = 2;  # top-left - Mission Control
@@ -154,7 +152,7 @@
         };
         "com.apple.WindowManager" = {
           EnableStandardClickToShowDesktop = 0; # Click wallpaper to reveal desktop
-          StandardHideDesktopIcons = 0; # Show items on desktop
+          StandardHideDesktopIcons = 1; # Show items on desktop
           HideDesktop = 0; # Do not hide items on desktop & stage manager
           StageManagerHideWidgets = 0;
           StandardHideWidgets = 0;

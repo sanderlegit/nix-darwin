@@ -27,6 +27,10 @@
       { name = "zsh-syntax-highlighting"; src = pkgs.zsh-syntax-highlighting; }
     ];
 
+    envExtra = ''
+      eval "$(direnv hook zsh)"
+    '';
+
     # Add specific completion commands *after* the main completion system is initialized
     completionInit = ''
       # AWS CLI v2 completion using the Nix package path
@@ -76,11 +80,11 @@
 
       __aws_sso_profile_complete() {
            local _args=''${AWS_SSO_HELPER_ARGS:- -L error}
-          _multi_parts : "($(/nix/store/s5s6si3kmz8k15vm9v6d5qk3mpa546cc-aws-sso-cli-1.17.0/bin/.aws-sso-wrapped ''${=_args} list --csv Profile))"
+          _multi_parts : "($(${pkgs.aws-sso-cli}/bin/.aws-sso-wrapped ''${=_args} list --csv Profile))"
       }
 
       compdef __aws_sso_profile_complete aws-sso-profile
-      complete -C /nix/store/s5s6si3kmz8k15vm9v6d5qk3mpa546cc-aws-sso-cli-1.17.0/bin/.aws-sso-wrapped aws-sso
+      complete -C ${pkgs.aws-sso-cli}/bin/.aws-sso-wrapped aws-sso
 
     '';
 
@@ -163,17 +167,18 @@
       export ZELLIX_MOD="$HOME/dotfiles/zellix"
 
       function te() {
-        # zellij ac rename-tab "hx $(basename "$(pwd)")"
+        # zellij ac rename-tab "nvim $(basename "$(pwd)")"
         nu $ZELLIX_MOD/run.nu $ZELLIX_MOD/example $@
       }
 
       function pop {
         zellij ac rename-tab "$(basename "$(pwd)")"
-        zellij run -f -x 0 -y 0 --width 100% --height 100% -- nu $ZELLIX_MOD/run.nu $ZELLIX_MOD/example
+        # zellij run -f -x 0 -y 0 --width 100% --height 100% -- nu $ZELLIX_MOD/run.nu $ZELLIX_MOD/example
+        zellij run -f -x 0 -y 0 --width 100% --height 100% -- nvim
         # zellij run -f -x 0 -y 0 --width 100% --height 100% -- hx
       }
 
-      export EDITOR=hx
+      export EDITOR=nvim
       export PREVIEW_SH=$HOME/dotfiles/preview.sh
 
       function fw() {
@@ -212,25 +217,30 @@
 
       function drc() {
         zellij ac rename-tab "dotfiles"
-        cd ~/dotfiles/ && nu $ZELLIX_MOD/run.nu $ZELLIX_MOD/example
-        # cd ~/dotfiles/ && hx
+        # cd ~/dotfiles/ && nu $ZELLIX_MOD/run.nu $ZELLIX_MOD/example
+        cd ~/dotfiles/ && nvim
         cd -
       }
 
-      ## nix 
+      ## nix
+
+      function nru() {
+        nix flake update --flake ~/nix
+      }
 
       function nre() {
-        darwin-rebuild switch --flake ~/nix#m4 --show-trace -v
+        sudo darwin-rebuild switch --flake ~/nix#m4 --show-trace -v
       }
 
       function nrc() {
         zellij ac rename-tab "nix-config"
         cd $HOME/nix/
         # nu $ZELLIX_MOD/run.nu $ZELLIX_MOD/example \
-        hx \
+        # hx \
+        nvim \
          $HOME/nix/home/shell.nix \
          $HOME/nix/flake.nix && \
-         darwin-rebuild switch --flake ~/nix#m4 --show-trace -v
+         sudo darwin-rebuild switch --flake ~/nix#m4 --show-trace -v
         cd -
       }
 
@@ -245,15 +255,13 @@
 
       # u6-env
 
-      export VERTEXAI_PROJECT=gen-lang-client-0342800361
-      export VERTEXAI_LOCATION=us-central1
 
       ## Aliases
       alias l="eza -la"
       alias ll="eza -la"
       alias ld="lazydocker"
-      # alias ai="aider --no-attribute-author --no-attribute-committer --dark-mode"
-      alias ai="uv run --no-project -p $HOME/.config/google-ai/.venv/bin/python aider --no-attribute-author --no-attribute-committer --dark-mode --model gemini-2.5-pro-preview-05-06"
+      alias ai="uv run --no-project -p /Users/sander/.config/aider-gemini/.venv/bin/python aider --no-attribute-author --no-attribute-committer --no-attribute-co-authored-by --no-gitignore --notifications --notifications-command \"afplay terminated.aif\" --dark-mode --thinking-tokens 6660 --model vertex_ai/gemini-2.5-pro"
+
       alias oi="aichat -m ollama:gemma3:27b"
       # alias air='~/.air'
 
@@ -295,7 +303,7 @@
               return 1
           fi
 
-          eval $(/nix/store/s5s6si3kmz8k15vm9v6d5qk3mpa546cc-aws-sso-cli-1.17.0/bin/.aws-sso-wrapped ''${=_args} eval -p "$1")
+          eval $(${pkgs.aws-sso-cli}/bin/.aws-sso-wrapped ''${=_args} eval -p "$1")
           if [ "$AWS_SSO_PROFILE" != "$1" ]; then
               return 1
           fi
@@ -307,13 +315,26 @@
               echo "AWS_SSO_PROFILE is not set"
               return 1
           fi
-          eval $(/nix/store/s5s6si3kmz8k15vm9v6d5qk3mpa546cc-aws-sso-cli-1.17.0/bin/.aws-sso-wrapped ''${=_args} eval -c)
+          eval $(${pkgs.aws-sso-cli}/bin/.aws-sso-wrapped ''${=_args} eval -c)
       }
 
       # END_AWS_SSO_CLI
 
       function direnv-new() {
         nix flake new -t github:nix-community/nix-direnv ./;
+
+        # Path to the .env file
+        DOTENV_PATH="./.env"
+
+        # Create .env if it doesn't exist
+        if [ ! -f "$DOTENV_PATH" ]; then
+          touch "$DOTENV_PATH"
+          echo "Created .env file"
+        fi
+
+        echo "dotenv .env" >> ./.envrc
+        echo "Added dotenv .env to .envrc"
+
         direnv allow
 
         # Check if we're in a git repository
@@ -427,6 +448,18 @@
       	fi
       	rm -f -- "$tmp"
       }
+
+      function aider-cost() {
+        cat .aider.chat.history.md | grep Cost | cut -d : -f 3 | cut -d ' ' -f 2 | python3 -c "import sys; total = 0.0; [total := total + float(line.strip().replace("$", "")) for line in sys.stdin]; print(f'Total Cost: {total:.2f}')"
+      }
+
+      alias tmux="tmux -f ~/.config/tmux/tmux.conf"
+      function pqp() {
+      	pqrs head -j "$@" | jq
+      }
+
+      source $HOME/.config/functions.sh
+      [ -f $HOME/.config/secrets.env ] && source $HOME/.config/secrets.env
     '';
 
     shellAliases = {
@@ -442,6 +475,14 @@
       pre = "gh pr comment --editor --edit-last";
       prv = "gh pr view --comments";
       prw = "gh pr view --web";
+      prbuild = "gh pr comment -b '/build'";
+      docker-stop-all = "docker stop $(docker ps -q)";
+      docker-rm-all = "docker rm $(docker ps -a -q)";
+      fdf = "fd -t f";
+      fdp = "fd -t f -p";
+      # ss = "ssh -t pompstation -- /home/linuxbrew/.linuxbrew/bin/zellij a -c";
+      ss = "ssh -t enge";
+      xx = "open vnc://sander@enge";
     };
 
   };
