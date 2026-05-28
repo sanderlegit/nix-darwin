@@ -226,7 +226,7 @@
             "keepassxc"
             "topnotch"
             "betterdisplay"
-            "vivid"
+            "vivid-app"
             # "mullvadvpn"
             "slack"
             "spotify"
@@ -234,7 +234,7 @@
             "karabiner-elements"
             "chromium"
             "sysex-librarian"
-            "tailscale"
+            "tailscale-app"
           ];
           masApps = {
             # "Yoink" = 457622435;
