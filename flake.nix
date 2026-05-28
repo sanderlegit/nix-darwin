@@ -86,7 +86,7 @@
             pkgs.nodejs_22
             # pkgs.nodejs_18
             pkgs.yarn-berry
-            pkgs.nodePackages.aws-cdk
+            # pkgs.nodePackages.aws-cdk # removed from nixpkgs, use npx or npm i -g aws-cdk
             pkgs.typescript-language-server
             pkgs.yaml-language-server
 
@@ -117,7 +117,7 @@
             pkgs.bat # better cat
             pkgs.bottom # sysmonitor
             pkgs.htop # sysmonitor
-            pkgs.du-dust # diskusage
+            pkgs.dust # diskusage
             pkgs.mosh # betterssh
             # pkgs.docker        # macos also needs  https://docs.docker.com/desktop/release-notes/
             pkgs.dive # docker inspect
