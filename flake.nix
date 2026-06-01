@@ -194,7 +194,11 @@
         # this is required if you want to use darwin's default shell - zsh
         homebrew = {
           enable = true;
+          taps = [
+            "clerk/stable"
+          ];
           brews = [
+            "clerk/stable/clerk"
             "cfn-lint"
             "wget"
             "curl"
