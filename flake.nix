@@ -90,7 +90,6 @@
             pkgs.typescript-language-server
             pkgs.yaml-language-server
 
-            pkgs.alacritty # terminal
             pkgs.aerospace # i3 style windows
             pkgs.tmux # multiplex term
             # pkgs.wemux # easier multi user tmu
@@ -146,7 +145,6 @@
             pkgs.pqrs
             pkgs.terraform-ls
             pkgs.gitui
-            pkgs.nushell
             pkgs.git-lfs
             pkgs.silver-searcher
             # pkgs.mold # faster linker, fasater compilation
@@ -203,7 +201,6 @@
             "clerk/stable/clerk"
             "cfn-lint"
             "wget"
-            "curl"
             "mas"
             "helm"
             "patchelf"
