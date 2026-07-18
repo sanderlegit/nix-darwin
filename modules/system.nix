@@ -22,34 +22,26 @@
     # $ darwin-rebuild changelog
     stateVersion = 5;
     # activationScripts are executed every time you boot the system or run `nixos-rebuild` / `darwin-rebuild`.
-    # activationScripts.postUserActivation.text = ''
-    #   # activateSettings -u will reload the settings from the database and apply them to the current session,
-    #   # so we do not need to logout and login again to make the changes take effect.
-    #   /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
-    # '';
+    activationScripts.extraActivation.text = ''
+      /usr/sbin/softwareupdate --install-rosetta --agree-to-license
+    '';
 
     defaults = {
       # menuExtraClock.Show24Hour = true;  # show 24 hour clock
 
-      # customize dock
-      dock = {
-        autohide = true;
-        show-recents = false; # disable recent apps
-
-        persistent-apps = [
-          "/Applications/KeePassXC.app"
-          "/Applications/Ghostty.app"
-          "/Applications/Firefox.app"
-          "/Applications/Signal.app"
-          "/System/Applications/Messages.app"
-          "/Applications/Ableton Live 12 Suite.app"
-        ];
-        # customize Hot Corners(触发角, 鼠标移动到屏幕角落时触发的动作)
-        #wvous-tl-corner = 2;  # top-left - Mission Control
-        #wvous-tr-corner = 13;  # top-right - Lock Screen
-        #wvous-bl-corner = 3;  # bottom-left - Application Windows
-        #wvous-br-corner = 4;  # bottom-right - Desktop
-      };
+      # dock - not managed by nix, configured manually
+      # dock = {
+      #   autohide = true;
+      #   show-recents = false;
+      #   persistent-apps = [
+      #     "/Applications/KeePassXC.app"
+      #     "/Applications/Ghostty.app"
+      #     "/Applications/Firefox.app"
+      #     "/Applications/Signal.app"
+      #     "/System/Applications/Messages.app"
+      #     "/Applications/Ableton Live 12 Suite.app"
+      #   ];
+      # };
 
       # customize finder
       finder = {
