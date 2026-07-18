@@ -98,6 +98,7 @@
             pkgs.helix # editor
             pkgs.lsp-ai
             pkgs.neovim # editor
+            pkgs.tree-sitter
             pkgs.nil # nix lsp
             pkgs.yazi # file explore
             pkgs.broot # file explore

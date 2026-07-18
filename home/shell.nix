@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ pkgs, lib, ... }: {
   programs.ripgrep.enable = true;
 
   programs.fzf = {
@@ -17,11 +17,6 @@
     autosuggestion.enable = true;
 
     # Ensure bash completion support is loaded before completionInit runs
-    initExtraBeforeCompInit = ''
-      autoload -Uz +X compinit && compinit
-      autoload -Uz bashcompinit && bashcompinit
-    '';
-
     plugins = [
       { name = "fzf-tab"; src = pkgs.zsh-fzf-tab; }
       { name = "zsh-syntax-highlighting"; src = pkgs.zsh-syntax-highlighting; }
@@ -88,7 +83,12 @@
 
     '';
 
-    initExtra = ''
+    initContent = lib.mkMerge [
+      (lib.mkOrder 550 ''
+        autoload -Uz +X compinit && compinit
+        autoload -Uz bashcompinit && bashcompinit
+      '')
+      ''
 
       export XDG_CONFIG_HOME=~/.config/
 
@@ -460,7 +460,8 @@
 
       source $HOME/.config/functions.sh
       [ -f $HOME/.config/secrets.env ] && source $HOME/.config/secrets.env
-    '';
+    ''
+    ];
 
     shellAliases = {
       k = "kubectl";
