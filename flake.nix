@@ -255,6 +255,10 @@
 
         # Necessary for using flakes on this system.
         nix.settings.experimental-features = "nix-command flakes";
+        nix.settings.max-jobs = "auto";
+        nix.gc.automatic = true;
+        nix.gc.interval = { Day = 7; };
+        nix.optimise.automatic = true;
 
         environment.shells = [ pkgs.zsh ];
 
