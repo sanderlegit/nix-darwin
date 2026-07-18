@@ -196,6 +196,7 @@
           enable = true;
           taps = [
             "clerk/stable"
+            "Sikarugir-App/sikarugir"
           ];
           brews = [
             "clerk/stable/clerk"
@@ -215,6 +216,7 @@
           ];
           casks = [
             "claude-code"
+            "Sikarugir-App/sikarugir/sikarugir"
             #"aria2"
             #"httpie"
             #"insomnia"
