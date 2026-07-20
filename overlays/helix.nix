@@ -67,6 +67,7 @@ final: prev: {
     ];
 
     __contentAddressed = false;
+    # sandbox disabled: build fetches git deps at build time
     __noChroot = true;
 
     preBuildPhases = [ "preBuildPhase" ];
