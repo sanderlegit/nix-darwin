@@ -185,6 +185,8 @@
             pkgs.pandoc
             pkgs.duckdb
 
+            (pkgs.python3Packages.youtube-transcript-api)
+
             pkgs.just
 
           ];
@@ -211,6 +213,7 @@
             "lazygit"
             "gomplate"
             "yq"
+            "yt-dlp"
           ];
           casks = [
             "claude-code"
