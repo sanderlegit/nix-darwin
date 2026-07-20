@@ -257,14 +257,6 @@
 
 
       ## Aliases
-      alias l="eza -la"
-      alias ll="eza -la"
-      alias ld="lazydocker"
-      alias ai="uv run --no-project -p /Users/sander/.config/aider-gemini/.venv/bin/python aider --no-attribute-author --no-attribute-committer --no-attribute-co-authored-by --no-gitignore --notifications --notifications-command \"afplay terminated.aif\" --dark-mode --thinking-tokens 6660 --model vertex_ai/gemini-2.5-pro"
-
-      alias oi="aichat -m ollama:gemma3:27b"
-      # alias air='~/.air'
-
       alias cu="cd .. && ll"
       ci () {
         cd $1 && ll
@@ -465,8 +457,8 @@
 
     shellAliases = {
       k = "kubectl";
-      l = "ls -la";
-      ll = "ls -la";
+      l = "eza -la";
+      ll = "eza -la";
       ld = "lazydocker";
       cu = "cd .. && ll";
       zj = "zellij";

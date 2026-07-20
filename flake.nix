@@ -18,7 +18,6 @@
 
   outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager, nix-homebrew }:
     let
-      # TODO replace with your own username, email, system, and hostname
       username = "sander";
       useremail = "sander@aaadataplumbing.com";
       system = "aarch64-darwin";
@@ -140,7 +139,6 @@
             pkgs.aws-sso-cli
             pkgs.parquet-tools
             pkgs.difftastic
-            pkgs.aichat
             pkgs.croc
             pkgs.pqrs
             pkgs.terraform-ls
@@ -154,34 +152,7 @@
             (pkgs.azure-cli.withExtensions [ pkgs.azure-cli.extensions.azure-devops ])
 
             ## Py
-            # run, to create venv with py version, and edit pyproject toml
-            # $ python3.11 -m venv "venv"
-            # $ source ./venv/bin/activate
-            # $ poetry init
-            # $ poetry add {pkg}
-
-            # run, when in dir of pyproject.toml
-            # $ poetry env use python
-            # $ poetry install
-            # $ $(poetry env activate)
-            # pkgs.poetry
             pkgs.uv
-            # pkgs.python3
-            # pkgs.python3Packages.virtualenv
-            # pkgs.python311
-            # pkgs.python312
-            # pkgs.python312Packages.pip
-            # pkgs.python312Packages.ruff
-            # pkgs.python312Packages.python-lsp-server
-            # pkgs.python312Packages.jedi-language-server
-            # pkgs.python312Packages.playwright
-            # pkgs.python312Packages.cfn-lint
-            # pkgs.python312Packages.scrapy
-            # pkgs.jupyter-all
-
-            # pkgs.bdt # boring data tool
-
-            # pkgs.nyaa # torrent client
             pkgs.pandoc
             pkgs.duckdb
 
