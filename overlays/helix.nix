@@ -39,8 +39,6 @@ final: prev: {
 
     # cargoHash = "";
 
-    # cargoHash = builtins.trace oldAttrs.cargoDeps "wow";
-
     # cargoDeps = oldAttrs.cargoDeps.overrideAttrs (prev.lib.const {
     # cargoDeps = oldAttrs.cargoDeps.overrideAttrs (old: {
     #   # name = "helix-vendor.tar.gz";
